@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../services/spotifyApi";
+import {
+  Box,
+  Paper,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 
 const Callback: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -58,35 +65,71 @@ const Callback: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+      <Box
+        minHeight="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+      >
+        <Paper
+          elevation={6}
+          sx={{ p: 6, borderRadius: 4, textAlign: "center", maxWidth: 400 }}
+        >
+          <CircularProgress color="success" sx={{ mb: 3 }} />
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            color="text.primary"
+            gutterBottom
+          >
             Connecting to Spotify...
-          </h2>
-          <p className="text-gray-600">Getting your vibes ready! ✨</p>
-        </div>
-      </div>
+          </Typography>
+          <Typography color="text.secondary">
+            Getting your vibes ready! ✨
+          </Typography>
+        </Paper>
+      </Box>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="text-red-500 text-6xl mb-4">💀</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+      <Box
+        minHeight="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+      >
+        <Paper
+          elevation={6}
+          sx={{ p: 6, borderRadius: 4, textAlign: "center", maxWidth: 400 }}
+        >
+          <Typography variant="h2" color="error" gutterBottom>
+            💀
+          </Typography>
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            color="text.primary"
+            gutterBottom
+          >
             Oops! Something went wrong
-          </h2>
-          <p className="text-gray-600 mb-6">{error}</p>
-          <button
+          </Typography>
+          <Typography color="text.secondary" gutterBottom>
+            {error}
+          </Typography>
+          <Button
             onClick={() => navigate("/")}
-            className="bg-purple-600 text-white font-bold py-3 px-6 rounded-full hover:bg-purple-700 transition-colors duration-200"
+            variant="contained"
+            color="success"
+            sx={{ mt: 2, borderRadius: 8, fontWeight: 700 }}
           >
             Try Again
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Paper>
+      </Box>
     );
   }
 

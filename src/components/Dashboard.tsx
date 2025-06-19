@@ -3,6 +3,63 @@ import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../services/spotifyApi";
 import { genZJudge } from "../services/genZJudge";
 import { SpotifyUser, SpotifyTrack, GenZJudgment } from "../types/spotify";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Avatar,
+  Button,
+  Paper,
+  Grid,
+  CircularProgress,
+  Container,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  useTheme,
+} from "@mui/material";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import { styled } from "@mui/material/styles";
+
+const TypingSummary = ({ text }: { text: string }) => {
+  const [displayed, setDisplayed] = useState("");
+  useEffect(() => {
+    let i = 0;
+    let current = "";
+    const words = text.split(" ");
+    const interval = setInterval(() => {
+      if (i < words.length) {
+        current += (i === 0 ? "" : " ") + words[i];
+        setDisplayed(current);
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 180);
+    return () => clearInterval(interval);
+  }, [text]);
+  return (
+    <Typography
+      variant="h6"
+      sx={{ fontWeight: 600, color: "text.primary", minHeight: 48 }}
+    >
+      {displayed}
+    </Typography>
+  );
+};
+
+const SpotifyPaper = styled(Paper)(({ theme }) => ({
+  background: "linear-gradient(135deg, #1db954 0%, #191414 100%)",
+  color: "#fff",
+  borderRadius: 20,
+  boxShadow: theme.shadows[4],
+}));
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<SpotifyUser | null>(null);
@@ -12,6 +69,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     const loadData = async () => {
@@ -30,7 +88,7 @@ const Dashboard: React.FC = () => {
         setUser(userData);
 
         // Load recently played tracks
-        const tracksData = await spotifyApi.getRecentlyPlayed(100);
+        const tracksData = await spotifyApi.getRecentlyPlayed(50);
         setTracks(tracksData);
 
         // Analyze tracks with Gen Z judgment
@@ -58,182 +116,214 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+      <Box
+        minHeight="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+      >
+        <Paper
+          elevation={6}
+          sx={{ p: 6, borderRadius: 4, textAlign: "center", maxWidth: 400 }}
+        >
+          <CircularProgress color="success" sx={{ mb: 3 }} />
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            color="text.primary"
+            gutterBottom
+          >
             Analyzing your vibes...
-          </h2>
-          <p className="text-gray-600">Getting the Gen Z verdict ready! ✨</p>
-        </div>
-      </div>
+          </Typography>
+          <Typography color="text.secondary">
+            Getting the Gen Z verdict ready! ✨
+          </Typography>
+        </Paper>
+      </Box>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 flex items-center justify-center">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-          <div className="text-red-500 text-6xl mb-4">💀</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+      <Box
+        minHeight="100vh"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+      >
+        <Paper
+          elevation={6}
+          sx={{ p: 6, borderRadius: 4, textAlign: "center", maxWidth: 400 }}
+        >
+          <Typography variant="h2" color="error" gutterBottom>
+            💀
+          </Typography>
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            color="text.primary"
+            gutterBottom
+          >
             Oops! Something went wrong
-          </h2>
-          <p className="text-gray-600 mb-6">{error}</p>
-          <button
+          </Typography>
+          <Typography color="text.secondary" gutterBottom>
+            {error}
+          </Typography>
+          <Button
             onClick={handleLogout}
-            className="bg-purple-600 text-white font-bold py-3 px-6 rounded-full hover:bg-purple-700 transition-colors duration-200"
+            variant="contained"
+            color="success"
+            sx={{ mt: 2, borderRadius: 8, fontWeight: 700 }}
           >
             Logout & Try Again
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Paper>
+      </Box>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600">
-      {/* Header */}
-      <div className="bg-white/10 backdrop-blur-lg border-b border-white/20">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h1 className="text-2xl font-bold text-white">
-                Gen Z Song Judge
-              </h1>
-              {user && (
-                <div className="flex items-center space-x-3 bg-white/20 rounded-full px-4 py-2">
-                  {user.images?.[0] && (
-                    <img
-                      src={user.images[0].url}
-                      alt={user.display_name}
-                      className="w-8 h-8 rounded-full"
-                    />
-                  )}
-                  <span className="text-white font-medium">
-                    {user.display_name}
-                  </span>
-                </div>
+    <Box
+      minHeight="100vh"
+      sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+    >
+      <AppBar
+        position="static"
+        sx={{ background: "#191414", boxShadow: "none" }}
+      >
+        <Toolbar>
+          <Typography
+            variant="h5"
+            fontWeight={700}
+            sx={{ flexGrow: 1, color: "#fff", letterSpacing: 1 }}
+          >
+            <MusicNoteIcon sx={{ mr: 1, verticalAlign: "middle" }} /> Spotify
+            Gen Z Judge
+          </Typography>
+          {user && (
+            <Box display="flex" alignItems="center" gap={2}>
+              {user.images?.[0] && (
+                <Avatar src={user.images[0].url} alt={user.display_name} />
               )}
-            </div>
-            <button
-              onClick={handleLogout}
-              className="bg-white/20 text-white px-4 py-2 rounded-full hover:bg-white/30 transition-colors duration-200"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Summary Section */}
+              <Typography color="#fff" fontWeight={600}>
+                {user.display_name}
+              </Typography>
+            </Box>
+          )}
+          <Button
+            onClick={handleLogout}
+            color="inherit"
+            sx={{
+              ml: 3,
+              borderRadius: 8,
+              fontWeight: 700,
+              background: "#1db954",
+              color: "#fff",
+              "&:hover": { background: "#1ed760" },
+            }}
+          >
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="md" sx={{ py: 6 }}>
         {summary && (
-          <div className="bg-white rounded-2xl shadow-2xl p-6 mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <SpotifyPaper sx={{ mb: 6, p: 4 }}>
+            <Typography
+              variant="h4"
+              fontWeight={800}
+              sx={{ mb: 2, color: "#1db954", letterSpacing: 1 }}
+            >
               Your Vibe Summary ✨
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-purple-600 mb-2">
-                  {Math.round(summary.averageScore)}/100
-                </div>
-                <p className="text-gray-600">Average Score</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-pink-600 mb-2">
-                  {tracks.length}
-                </div>
-                <p className="text-gray-600">Songs Analyzed</p>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">
-                  {Object.keys(summary.vibeBreakdown).length}
-                </div>
-                <p className="text-gray-600">Different Vibes</p>
-              </div>
-            </div>
-            <div className="mt-6 p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl">
-              <p className="text-lg font-semibold text-gray-800">
-                {summary.overallVibe}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Top Judgments */}
-        {summary?.topJudgments && (
-          <div className="bg-white rounded-2xl shadow-2xl p-6 mb-8">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              🔥 Top Judgments
-            </h3>
-            <div className="space-y-3">
-              {summary.topJudgments.map((judgment: string, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-center space-x-3 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg"
+            </Typography>
+            <Grid
+              container
+              spacing={4}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item xs={12} md={4} textAlign="center">
+                <Typography
+                  variant="h3"
+                  fontWeight={900}
+                  sx={{ color: "#1db954" }}
                 >
-                  <span className="text-2xl">#{index + 1}</span>
-                  <p className="text-gray-800 font-medium">{judgment}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Songs List */}
-        <div className="bg-white rounded-2xl shadow-2xl p-6">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6">
-            Your Songs & Gen Z Verdicts 💅
-          </h3>
-          <div className="space-y-4 max-h-96 overflow-y-auto">
-            {judgments.map((judgment, index) => (
-              <div
-                key={judgment.track.id}
-                className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200"
+                  {Math.round(summary.averageScore)}/100
+                </Typography>
+                <Typography color="#fff">Average Score</Typography>
+              </Grid>
+              <Grid item xs={12} md={4} textAlign="center">
+                <Typography
+                  variant="h3"
+                  fontWeight={900}
+                  sx={{ color: "#fff" }}
+                >
+                  {tracks.length}
+                </Typography>
+                <Typography color="#fff">Songs Analyzed</Typography>
+              </Grid>
+              <Grid item xs={12} md={4} textAlign="center">
+                <Typography
+                  variant="h3"
+                  fontWeight={900}
+                  sx={{ color: "#fff" }}
+                >
+                  {Object.keys(summary.vibeBreakdown).length}
+                </Typography>
+                <Typography color="#fff">Different Vibes</Typography>
+              </Grid>
+            </Grid>
+            <Box mt={4} mb={2}>
+              <TypingSummary text={summary.overallVibe} />
+            </Box>
+            <Divider sx={{ my: 3, background: "rgba(255,255,255,0.2)" }} />
+            <Box>
+              <Typography
+                variant="h5"
+                fontWeight={700}
+                sx={{ color: "#fff", mb: 2 }}
               >
-                <div className="flex-shrink-0">
-                  <img
-                    src={
-                      judgment.track.album.images[0]?.url ||
-                      "/placeholder-album.png"
-                    }
-                    alt={judgment.track.album.name}
-                    className="w-16 h-16 rounded-lg object-cover"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-semibold text-gray-800 truncate">
-                    {judgment.track.name}
-                  </h4>
-                  <p className="text-gray-600 text-sm truncate">
-                    {judgment.track.artists
-                      .map((artist) => artist.name)
-                      .join(", ")}
-                  </p>
-                  <p className="text-gray-500 text-xs truncate">
-                    {judgment.track.album.name}
-                  </p>
-                </div>
-                <div className="flex-shrink-0 text-right">
-                  <div className="text-2xl mb-1">{judgment.emoji}</div>
-                  <div className="text-sm font-medium text-gray-600">
-                    {judgment.vibe}
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {Math.round(judgment.score)}/100
-                  </div>
-                </div>
-                <div className="flex-shrink-0 max-w-xs">
-                  <p className="text-sm text-gray-700 italic">
-                    "{judgment.judgment}"
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
+                <EmojiEventsIcon sx={{ mr: 1, color: "#f1c40f" }} /> Top
+                Judgments
+              </Typography>
+              <List>
+                {summary.topJudgments.map((judgment: string, index: number) => (
+                  <ListItem
+                    key={index}
+                    sx={{
+                      background: "rgba(25,20,20,0.7)",
+                      borderRadius: 2,
+                      mb: 1,
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          bgcolor: "#1db954",
+                          color: "#fff",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {index + 1}
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Typography color="#fff" fontWeight={600}>
+                          {judgment}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </SpotifyPaper>
+        )}
+      </Container>
+    </Box>
   );
 };
 
