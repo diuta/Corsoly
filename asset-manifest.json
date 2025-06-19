@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Judgify/static/css/main.e6c13ad2.css",
+    "main.js": "/Judgify/static/js/main.c12697bd.js",
+    "static/js/453.e990c558.chunk.js": "/Judgify/static/js/453.e990c558.chunk.js",
+    "index.html": "/Judgify/index.html",
+    "main.e6c13ad2.css.map": "/Judgify/static/css/main.e6c13ad2.css.map",
+    "main.c12697bd.js.map": "/Judgify/static/js/main.c12697bd.js.map",
+    "453.e990c558.chunk.js.map": "/Judgify/static/js/453.e990c558.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.c12697bd.js"
+  ]
+}
