@@ -6,7 +6,7 @@ import Dashboard from "./components/Dashboard";
 
 function App() {
   return (
-    <BrowserRouter basename="/Judgify">
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login onLogin={() => {}} />} />
         <Route path="/callback" element={<Callback />} />
