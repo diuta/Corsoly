@@ -248,10 +248,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <Box
-      minHeight="100vh"
-      sx={{ background: "#f5f5dc" }}
-    >
+    <Box minHeight="100vh" sx={{ background: "#f5f5dc" }}>
       <AppBar
         position="static"
         sx={{ background: "#191414", boxShadow: "none" }}
@@ -292,6 +289,9 @@ const Dashboard: React.FC = () => {
         </Toolbar>
       </AppBar>
       <div className="container py-5">
+        <div className="mb-2" style={{ color: "#7a5a2f", fontSize: 16 }}>
+          Based on 1 month of your music listening history....
+        </div>
         <h2
           className="text-center mb-5 display-4 fw-bold"
           style={{ color: "#6d4c1c", letterSpacing: 1 }}
