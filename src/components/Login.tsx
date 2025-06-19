@@ -40,7 +40,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               className="fw-bold mb-2"
               style={{ color: "#6d4c1c", letterSpacing: 1 }}
             >
-              Lostify!
+              Corsoly!
             </h2>
             <div className="mb-2" style={{ color: "#7a5a2f", fontSize: 16 }}>
               Aren't you curious what your music taste looks like for the last 1
@@ -49,7 +49,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           </div>
           <div className="mb-4">
             <h5 className="fw-bold mb-2" style={{ color: "#6d4c1c" }}>
-              Connect with Spotify
+              But first, let's connect with Spotify
             </h5>
             <Button
               onClick={handleSpotifyLogin}
