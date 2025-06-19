@@ -89,8 +89,10 @@ export class SpotifyApiService {
     if (!this.accessToken) {
       throw new Error("Access token not set.");
     }
+    // Ensure limit does not exceed 50
+    const safeLimit = Math.min(limit, 50);
     const response = await axios.get<SpotifyRecentlyPlayedResponse>(
-      `${SPOTIFY_API_BASE}/me/player/recently-played?limit=${limit}`,
+      `${SPOTIFY_API_BASE}/me/player/recently-played?limit=${safeLimit}`,
       {
         headers: {
           Authorization: `Bearer ${this.accessToken}`,
