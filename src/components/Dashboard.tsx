@@ -187,7 +187,7 @@ const Dashboard: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+        sx={{ background: "#f5f5dc" }}
       >
         <Paper
           elevation={6}
@@ -214,7 +214,7 @@ const Dashboard: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+        sx={{ background: "#f5f5dc" }}
       >
         <Paper
           elevation={6}
@@ -262,8 +262,8 @@ const Dashboard: React.FC = () => {
             fontWeight={700}
             sx={{ flexGrow: 1, color: "#fff", letterSpacing: 1 }}
           >
-            <MusicNoteIcon sx={{ mr: 1, verticalAlign: "middle" }} /> 
-            Lostify
+            <MusicNoteIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+            Corsoly
           </Typography>
           {user && (
             <Box display="flex" alignItems="center" gap={2}>
@@ -291,10 +291,7 @@ const Dashboard: React.FC = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <div
-        className="py-5"
-        style={{ background: "#f5f5dc", minHeight: "100vh" }}
-      >
+      <div className="container py-5">
         <h2
           className="text-center mb-5 display-4 fw-bold"
           style={{ color: "#6d4c1c", letterSpacing: 1 }}
