@@ -2,7 +2,6 @@
   "name": "spotify-genz-judge",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://diuta.github.io/Judgify",
   "repository": {
     "type": "git",
     "url": "https://github.com/diuta/Judgify.git"
