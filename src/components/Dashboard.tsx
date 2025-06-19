@@ -11,7 +11,6 @@ import {
   Avatar,
   Button,
   Paper,
-  Grid,
   CircularProgress,
   Container,
   Card,
@@ -23,9 +22,10 @@ import {
   Divider,
   useTheme,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Grid from "@mui/material/Grid";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import { styled } from "@mui/material/styles";
 // @ts-ignore
 import confetti from "canvas-confetti";
 
@@ -73,23 +73,21 @@ const SpotifyPaper = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[4],
 }));
 
-const BouncyEmoji = styled("span")<any>(
-  ({ theme, bounce }: { bounce: boolean }) => ({
-    display: "inline-block",
-    fontSize: 36,
-    marginLeft: 8,
-    animation: bounce
-      ? "bounce-emoji 0.7s cubic-bezier(.36,.07,.19,.97) both"
-      : "none",
-    "@keyframes bounce-emoji": {
-      "0%": { transform: "translateY(0)" },
-      "30%": { transform: "translateY(-20px)" },
-      "50%": { transform: "translateY(0)" },
-      "70%": { transform: "translateY(-10px)" },
-      "100%": { transform: "translateY(0)" },
-    },
-  })
-);
+const BouncyEmoji = styled("span")<any>(({ bounce }: { bounce: boolean }) => ({
+  display: "inline-block",
+  fontSize: 36,
+  marginLeft: 8,
+  animation: bounce
+    ? "bounce-emoji 0.7s cubic-bezier(.36,.07,.19,.97) both"
+    : "none",
+  "@keyframes bounce-emoji": {
+    "0%": { transform: "translateY(0)" },
+    "30%": { transform: "translateY(-20px)" },
+    "50%": { transform: "translateY(0)" },
+    "70%": { transform: "translateY(-10px)" },
+    "100%": { transform: "translateY(0)" },
+  },
+}));
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<SpotifyUser | null>(null);
@@ -286,13 +284,14 @@ const Dashboard: React.FC = () => {
             >
               Your Vibe Summary ✨
             </Typography>
-            <Grid
-              container
-              spacing={4}
+            <Box
+              display="flex"
+              flexDirection={{ xs: "column", md: "row" }}
+              gap={4}
               justifyContent="center"
               alignItems="center"
             >
-              <Grid item xs={12} md={4} textAlign="center">
+              <Box flex={1} textAlign="center">
                 <Typography
                   variant="h3"
                   fontWeight={900}
@@ -301,8 +300,8 @@ const Dashboard: React.FC = () => {
                   {Math.round(summary.averageScore)}/100
                 </Typography>
                 <Typography color="#fff">Average Score</Typography>
-              </Grid>
-              <Grid item xs={12} md={4} textAlign="center">
+              </Box>
+              <Box flex={1} textAlign="center">
                 <Typography
                   variant="h3"
                   fontWeight={900}
@@ -311,8 +310,8 @@ const Dashboard: React.FC = () => {
                   {tracks.length}
                 </Typography>
                 <Typography color="#fff">Songs Analyzed</Typography>
-              </Grid>
-              <Grid item xs={12} md={4} textAlign="center">
+              </Box>
+              <Box flex={1} textAlign="center">
                 <Typography
                   variant="h3"
                   fontWeight={900}
@@ -321,8 +320,8 @@ const Dashboard: React.FC = () => {
                   {Object.keys(summary.vibeBreakdown).length}
                 </Typography>
                 <Typography color="#fff">Different Vibes</Typography>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
             <Box
               mt={4}
               mb={2}
