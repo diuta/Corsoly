@@ -79,8 +79,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </div>
             <div style={{ color: "#b2b2b2", fontSize: 13 }}>
               By logging in, you agree to let us access your recently played
-              tracks for analysis. We don't store any personal data, just vibes!
-              ✨
+              tracks for analysis. We don't store any personal data, relax!
             </div>
           </CardBody>
         </Card>
