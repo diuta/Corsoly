@@ -19,8 +19,6 @@ import {
   Paper,
   CircularProgress,
   Container,
-  Card,
-  CardContent,
   List,
   ListItem,
   ListItemAvatar,
@@ -33,6 +31,8 @@ import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 // @ts-ignore
 import confetti from "canvas-confetti";
+import { Row, Col, Card, CardBody, CardImg } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const TypingSummary = ({
   text,
@@ -292,148 +292,238 @@ const Dashboard: React.FC = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="lg" sx={{ py: 6 }}>
-        <Typography
-          variant="h2"
-          fontWeight={800}
-          align="center"
-          sx={{ mb: 6, color: "#191414", letterSpacing: 1 }}
+      <div
+        className="py-5"
+        style={{ background: "#f5f5dc", minHeight: "100vh" }}
+      >
+        <h2
+          className="text-center mb-5 display-4 fw-bold"
+          style={{ color: "#6d4c1c", letterSpacing: 1 }}
         >
           top 5 songs
-        </Typography>
+        </h2>
         {/* Top 5 songs row */}
-        <Box
-          display="flex"
-          flexDirection="row"
-          flexWrap="wrap"
-          justifyContent="center"
-          gap={4}
-          mb={6}
-        >
+        <Row className="justify-content-center g-4 mb-5">
           {topTracks.map((track, idx) => (
-            <Box
+            <Col
               key={track.id}
-              width={{ xs: "100%", sm: "45%", md: "18%" }}
-              minWidth={220}
+              xs={12}
+              sm={10}
+              md={6}
+              lg={4}
+              xl={3}
+              className="d-flex align-items-stretch"
             >
               <Card
-                sx={{ borderRadius: 4, boxShadow: 4, p: 2, minHeight: 320 }}
+                className="shadow rounded-4 border-0 w-100 position-relative"
+                style={{
+                  background: "#fffbe6",
+                  minHeight: 180,
+                  border: "2px dashed #e0cfa9",
+                }}
               >
-                <Box
-                  sx={{
-                    width: "100%",
-                    height: 120,
-                    mb: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "#f5f5dc",
-                    borderRadius: 2,
-                  }}
-                >
-                  {track.album.images?.[0]?.url ? (
-                    <img
-                      src={track.album.images[0].url}
-                      alt={track.name}
+                <div className="d-flex flex-row align-items-center p-3">
+                  <div
+                    className="me-3 flex-shrink-0"
+                    style={{ position: "relative" }}
+                  >
+                    {track.album.images?.[0]?.url ? (
+                      <CardImg
+                        src={track.album.images[0].url}
+                        alt={track.name}
+                        style={{
+                          width: 90,
+                          height: 90,
+                          objectFit: "cover",
+                          borderRadius: 12,
+                          border: "3px solid #e0cfa9",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        className="d-flex align-items-center justify-content-center bg-light border border-2 border-secondary rounded"
+                        style={{
+                          width: 90,
+                          height: 90,
+                          color: "#bfa76a",
+                          fontWeight: 600,
+                          fontSize: 14,
+                        }}
+                      >
+                        Submit Photo
+                      </div>
+                    )}
+                    <span
                       style={{
-                        width: 100,
-                        height: 100,
-                        objectFit: "cover",
-                        borderRadius: 8,
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                        position: "absolute",
+                        top: -12,
+                        left: -12,
+                        fontSize: 28,
+                        filter: "drop-shadow(0 2px 4px #fffbe6)",
                       }}
-                    />
-                  ) : (
-                    <Box
-                      sx={{
-                        width: 100,
-                        height: 100,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        border: "2px dashed #bbb",
-                        borderRadius: 8,
-                        color: "#888",
-                        fontWeight: 600,
-                        fontSize: 14,
-                        background: "#fff",
-                      }}
+                      role="img"
+                      aria-label="music"
                     >
-                      Submit Photo
-                    </Box>
-                  )}
-                </Box>
-                <CardContent sx={{ p: 0 }}>
-                  <Typography variant="h6" fontWeight={700} gutterBottom>
-                    {track.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Artist: {track.artists.map((a) => a.name).join(", ")}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Album: {track.album.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Genre:{" "}
-                    {topArtists.find((a) => a.name === track.artists[0]?.name)
-                      ?.genres[0] || "-"}
-                  </Typography>
-                </CardContent>
+                      🎵
+                    </span>
+                  </div>
+                  <CardBody className="p-0 ps-2">
+                    <h5 className="fw-bold mb-2" style={{ color: "#6d4c1c" }}>
+                      {track.name}
+                    </h5>
+                    <div className="mb-1 text-muted" style={{ fontSize: 15 }}>
+                      Artist: {track.artists.map((a) => a.name).join(", ")}
+                    </div>
+                    <div className="mb-1 text-muted" style={{ fontSize: 15 }}>
+                      Album: {track.album.name}
+                    </div>
+                    <div className="mb-1 text-muted" style={{ fontSize: 15 }}>
+                      Genre:{" "}
+                      {topArtists.find((a) => a.name === track.artists[0]?.name)
+                        ?.genres[0] || "-"}
+                    </div>
+                    <div className="mt-2">
+                      <span
+                        className="badge rounded-pill"
+                        style={{
+                          background: "#ffe6a1",
+                          color: "#6d4c1c",
+                          fontWeight: 600,
+                          fontSize: 13,
+                        }}
+                      >
+                        #{idx + 1}
+                      </span>
+                    </div>
+                  </CardBody>
+                </div>
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: 10,
+                    right: 18,
+                    fontSize: 22,
+                    opacity: 0.18,
+                  }}
+                  role="img"
+                  aria-label="star"
+                >
+                  ⭐
+                </span>
               </Card>
-            </Box>
+            </Col>
           ))}
-        </Box>
+        </Row>
         {/* 3 columns for artists, albums, genres */}
-        <Box
-          display="flex"
-          flexDirection={{ xs: "column", md: "row" }}
-          gap={4}
-          justifyContent="center"
-        >
-          <Box flex={1} minWidth={220}>
-            <Paper sx={{ p: 3, borderRadius: 4, minHeight: 220 }}>
-              <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
-                top 5 artists
-              </Typography>
-              <List>
-                {topArtists.map((artist, idx) => (
-                  <ListItem key={artist.id}>
-                    <ListItemText primary={artist.name} />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Box>
-          <Box flex={1} minWidth={220}>
-            <Paper sx={{ p: 3, borderRadius: 4, minHeight: 220 }}>
-              <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
-                top 5 albums
-              </Typography>
-              <List>
-                {topAlbums.map((album, idx) => (
-                  <ListItem key={album.id}>
-                    <ListItemText primary={album.name} />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Box>
-          <Box flex={1} minWidth={220}>
-            <Paper sx={{ p: 3, borderRadius: 4, minHeight: 220 }}>
-              <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
-                top 5 genres
-              </Typography>
-              <List>
-                {topGenres.map((genre: string, idx: number) => (
-                  <ListItem key={genre}>
-                    <ListItemText primary={genre} />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Box>
-        </Box>
-      </Container>
+        <Row className="justify-content-center g-4">
+          <Col xs={12} md={4} className="d-flex align-items-stretch">
+            <Card
+              className="shadow rounded-4 border-0 w-100"
+              style={{
+                background: "#fffbe6",
+                minHeight: 220,
+                border: "2px dashed #e0cfa9",
+              }}
+            >
+              <CardBody>
+                <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
+                  top 5 artists
+                </h4>
+                <ul className="list-unstyled mb-0">
+                  {topArtists.map((artist, idx) => (
+                    <li
+                      key={artist.id}
+                      className="mb-2 d-flex align-items-center"
+                    >
+                      <span
+                        className="me-2"
+                        style={{ fontSize: 18 }}
+                        role="img"
+                        aria-label="artist"
+                      >
+                        🎤
+                      </span>
+                      <span style={{ color: "#7a5a2f", fontWeight: 500 }}>
+                        {artist.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xs={12} md={4} className="d-flex align-items-stretch">
+            <Card
+              className="shadow rounded-4 border-0 w-100"
+              style={{
+                background: "#fffbe6",
+                minHeight: 220,
+                border: "2px dashed #e0cfa9",
+              }}
+            >
+              <CardBody>
+                <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
+                  top 5 albums
+                </h4>
+                <ul className="list-unstyled mb-0">
+                  {topAlbums.map((album, idx) => (
+                    <li
+                      key={album.id}
+                      className="mb-2 d-flex align-items-center"
+                    >
+                      <span
+                        className="me-2"
+                        style={{ fontSize: 18 }}
+                        role="img"
+                        aria-label="album"
+                      >
+                        💿
+                      </span>
+                      <span style={{ color: "#7a5a2f", fontWeight: 500 }}>
+                        {album.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col xs={12} md={4} className="d-flex align-items-stretch">
+            <Card
+              className="shadow rounded-4 border-0 w-100"
+              style={{
+                background: "#fffbe6",
+                minHeight: 220,
+                border: "2px dashed #e0cfa9",
+              }}
+            >
+              <CardBody>
+                <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
+                  top 5 genres
+                </h4>
+                <ul className="list-unstyled mb-0">
+                  {topGenres.map((genre, idx) => (
+                    <li key={genre} className="mb-2 d-flex align-items-center">
+                      <span
+                        className="me-2"
+                        style={{ fontSize: 18 }}
+                        role="img"
+                        aria-label="genre"
+                      >
+                        🏷️
+                      </span>
+                      <span style={{ color: "#7a5a2f", fontWeight: 500 }}>
+                        {genre}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </Box>
   );
 };
