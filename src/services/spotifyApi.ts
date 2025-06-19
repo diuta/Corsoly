@@ -6,16 +6,24 @@ import {
   SpotifyAuthResponse,
 } from "../types/spotify";
 
-const SPOTIFY_ACCOUNTS_URL = "https://accounts.spotify.com/api/...";
+const SPOTIFY_ACCOUNTS_URL = "https://accounts.spotify.com";
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
+// const CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET; // NEVER expose this in frontend!
+
+function checkEnvVars() {
+  if (!CLIENT_ID) throw new Error("Missing Spotify CLIENT_ID env variable");
+  if (!REDIRECT_URI)
+    throw new Error("Missing Spotify REDIRECT_URI env variable");
+}
 
 export class SpotifyApiService {
   private accessToken: string | null = null;
 
   // Generate Spotify authorization URL
   generateAuthUrl(): string {
+    checkEnvVars();
     const scopes = [
       "user-read-recently-played",
       "user-read-private",
@@ -30,22 +38,21 @@ export class SpotifyApiService {
       show_dialog: "true",
     });
 
-    // Corrected the authorization URL
     return `${SPOTIFY_ACCOUNTS_URL}/authorize?${params.toString()}`;
   }
 
   // Exchange authorization code for access token
   async exchangeCodeForToken(code: string): Promise<SpotifyAuthResponse> {
+    checkEnvVars();
+    // WARNING: Never expose client_secret in frontend code!
     const response = await axios.post(
-      // Corrected the token exchange URL
       `${SPOTIFY_ACCOUNTS_URL}/api/token`,
       new URLSearchParams({
         grant_type: "authorization_code",
         code,
         redirect_uri: REDIRECT_URI!,
         client_id: CLIENT_ID!,
-        // Note: For production apps, the client_secret should be handled on a secure backend,
-        // not exposed in the frontend. This example assumes a setup where this is acceptable.
+        // client_secret: CLIENT_SECRET, // Only on backend!
       }),
       {
         headers: {
