@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://diuta.github.io/Judgify",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/diuta/Judgify.git"
+  },
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
