@@ -120,9 +120,9 @@ const Dashboard: React.FC = () => {
         const userData = await spotifyApi.getCurrentUser();
         setUser(userData);
         // Fetch top tracks and artists
-        const tracksData = await spotifyApi.getTopTracks(5);
+        const tracksData = await spotifyApi.getTopTracks(5, "short_term");
         setTopTracks(tracksData);
-        const artistsData = await spotifyApi.getTopArtists(5);
+        const artistsData = await spotifyApi.getTopArtists(5, "short_term");
         setTopArtists(artistsData);
         // Aggregate albums from top tracks
         const albumMap: { [id: string]: SpotifyAlbum } = {};
