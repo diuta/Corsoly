@@ -30,6 +30,7 @@ export class SpotifyApiService {
       "user-read-recently-played",
       "user-read-private",
       "user-read-email",
+      "user-top-read",
     ];
 
     const params = new URLSearchParams({
