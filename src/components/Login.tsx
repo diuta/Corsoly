@@ -43,12 +43,11 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               Corsoly!
             </h2>
             <div className="mb-2" style={{ color: "#7a5a2f", fontSize: 16 }}>
-              Aren't you curious what your music taste looks like for the last 1
-              month ⁉️🤔
+              Aren't you curious what your music taste looks like for the last 1 month ⁉️
             </div>
           </div>
           <div className="mb-4">
-            <h5 className="fw-bold mb-2" style={{ color: "#6d4c1c" }}>
+            <h5 className="fw-bold mb-4" style={{ color: "#6d4c1c" }}>
               But first, let's connect with Spotify
             </h5>
             <Button
