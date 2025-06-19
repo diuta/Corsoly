@@ -40,19 +40,17 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               className="fw-bold mb-2"
               style={{ color: "#6d4c1c", letterSpacing: 1 }}
             >
-              Gen Z Song Judge
+              Lostify!
             </h2>
             <div className="mb-2" style={{ color: "#7a5a2f", fontSize: 16 }}>
-              Let's see what your music taste says about you fr fr 💅
+              Aren't you curious what your music taste looks like for the last 1
+              month ⁉️🤔
             </div>
           </div>
           <div className="mb-4">
             <h5 className="fw-bold mb-2" style={{ color: "#6d4c1c" }}>
               Connect with Spotify
             </h5>
-            <div className="mb-3" style={{ color: "#bfa76a" }}>
-              We'll analyze your last 50 songs and give you the Gen Z verdict ✨
-            </div>
             <Button
               onClick={handleSpotifyLogin}
               color="success"
@@ -71,13 +69,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               />
               Login with Spotify
             </Button>
-          </div>
-          <div className="mb-3" style={{ color: "#7a5a2f", fontSize: 15 }}>
-            ✨ We'll judge your music taste with Gen Z energy
-            <br />
-            🎵 Analyze your last 50 played songs
-            <br />
-            🔥 Get the ultimate vibe check
           </div>
           <div style={{ color: "#b2b2b2", fontSize: 13 }}>
             By logging in, you agree to let us access your recently played
