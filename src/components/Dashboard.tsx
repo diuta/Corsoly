@@ -286,41 +286,38 @@ const Dashboard: React.FC = () => {
             </Typography>
             <Box
               display="flex"
-              flexDirection={{ xs: "column", md: "row" }}
-              gap={4}
-              justifyContent="center"
+              flexDirection="column"
               alignItems="center"
+              justifyContent="center"
+              py={6}
             >
-              <Box flex={1} textAlign="center">
-                <Typography
-                  variant="h3"
-                  fontWeight={900}
-                  sx={{ color: "#1db954" }}
-                >
-                  {Math.round(summary.averageScore)}/100
-                </Typography>
-                <Typography color="#fff">Average Score</Typography>
+              <Typography variant="h3" fontWeight={700} mb={4} align="center">
+                Top 3 songs
+              </Typography>
+              <Box mb={6} width={{ xs: "90%", sm: "60%", md: "40%" }}>
+                {[0, 1, 2].map((i) => (
+                  <svg
+                    key={i}
+                    width="100%"
+                    height="32"
+                    viewBox="0 0 400 32"
+                    style={{ display: "block", marginBottom: 12 }}
+                  >
+                    <path
+                      d="M10 22 Q 100 2, 200 22 T 390 22"
+                      stroke="#222"
+                      strokeWidth="2"
+                      fill="none"
+                    />
+                  </svg>
+                ))}
               </Box>
-              <Box flex={1} textAlign="center">
-                <Typography
-                  variant="h3"
-                  fontWeight={900}
-                  sx={{ color: "#fff" }}
-                >
-                  {tracks.length}
-                </Typography>
-                <Typography color="#fff">Songs Analyzed</Typography>
-              </Box>
-              <Box flex={1} textAlign="center">
-                <Typography
-                  variant="h3"
-                  fontWeight={900}
-                  sx={{ color: "#fff" }}
-                >
-                  {Object.keys(summary.vibeBreakdown).length}
-                </Typography>
-                <Typography color="#fff">Different Vibes</Typography>
-              </Box>
+              <Typography variant="h3" fontWeight={700} mb={2} align="center">
+                Who are you?
+              </Typography>
+              <Typography variant="subtitle1" align="center" mt={2}>
+                You really like .. genre, and then judge
+              </Typography>
             </Box>
             <Box
               mt={4}
