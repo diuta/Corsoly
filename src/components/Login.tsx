@@ -2,7 +2,7 @@ import React from "react";
 import { spotifyApi } from "../services/spotifyApi";
 import { Row, Col, Card, CardBody, Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import bg from "./static/bg.png";
+import bg from "./Static/bg.png";
 
 interface LoginProps {
   onLogin: () => void;

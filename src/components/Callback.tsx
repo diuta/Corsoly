@@ -8,7 +8,7 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
-import bg from "./static/bg.png";
+import bg from "./Static/bg.png";
 
 const Callback: React.FC = () => {
   const [error, setError] = useState<string | null>(null);

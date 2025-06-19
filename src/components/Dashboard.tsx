@@ -32,7 +32,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import confetti from "canvas-confetti";
 import { Row, Col, Card, CardBody, CardImg } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import bg from "./static/bg.png";
+import bg from "./Static/bg.png";
 
 const TypingSummary = ({
   text,
