@@ -10,12 +10,14 @@ const SPOTIFY_ACCOUNTS_URL = "https://accounts.spotify.com";
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
 const REDIRECT_URI = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
-// const CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET; // NEVER expose this in frontend!
+const CLIENT_SECRET = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET;
 
 function checkEnvVars() {
   if (!CLIENT_ID) throw new Error("Missing Spotify CLIENT_ID env variable");
   if (!REDIRECT_URI)
     throw new Error("Missing Spotify REDIRECT_URI env variable");
+  if (!CLIENT_SECRET)
+    throw new Error("Missing Spotify CLIENT_SECRET env variable");
 }
 
 export class SpotifyApiService {
@@ -44,7 +46,7 @@ export class SpotifyApiService {
   // Exchange authorization code for access token
   async exchangeCodeForToken(code: string): Promise<SpotifyAuthResponse> {
     checkEnvVars();
-    // WARNING: Never expose client_secret in frontend code!
+    // WARNING: Never expose client_secret in frontend code in production!
     const response = await axios.post(
       `${SPOTIFY_ACCOUNTS_URL}/api/token`,
       new URLSearchParams({
@@ -52,7 +54,7 @@ export class SpotifyApiService {
         code,
         redirect_uri: REDIRECT_URI!,
         client_id: CLIENT_ID!,
-        // client_secret: CLIENT_SECRET, // Only on backend!
+        client_secret: CLIENT_SECRET!,
       }),
       {
         headers: {
