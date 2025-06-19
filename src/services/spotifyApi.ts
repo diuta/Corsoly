@@ -7,8 +7,8 @@ import {
 } from "../types/spotify";
 
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
-const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
-const REDIRECT_URI = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
+const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI;
 
 export class SpotifyApiService {
   private accessToken: string | null = null;
