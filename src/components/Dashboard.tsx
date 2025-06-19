@@ -2,7 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../services/spotifyApi";
 import { genZJudge } from "../services/genZJudge";
-import { SpotifyUser, SpotifyTrack, GenZJudgment } from "../types/spotify";
+import {
+  SpotifyUser,
+  SpotifyTrack,
+  GenZJudgment,
+  SpotifyArtist,
+  SpotifyAlbum,
+} from "../types/spotify";
 import {
   Box,
   AppBar,
@@ -23,7 +29,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Grid from "@mui/material/Grid";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 // @ts-ignore
@@ -91,9 +96,10 @@ const BouncyEmoji = styled("span")<any>(({ bounce }: { bounce: boolean }) => ({
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<SpotifyUser | null>(null);
-  const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
-  const [judgments, setJudgments] = useState<GenZJudgment[]>([]);
-  const [summary, setSummary] = useState<any>(null);
+  const [topTracks, setTopTracks] = useState<SpotifyTrack[]>([]);
+  const [topArtists, setTopArtists] = useState<SpotifyArtist[]>([]);
+  const [topAlbums, setTopAlbums] = useState<SpotifyAlbum[]>([]);
+  const [topGenres, setTopGenres] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -105,38 +111,53 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        // Check if we have a token
         const token = localStorage.getItem("spotify_access_token");
         if (!token) {
           navigate("/");
           return;
         }
-
         spotifyApi.setAccessToken(token);
-
-        // Load user profile
         const userData = await spotifyApi.getCurrentUser();
         setUser(userData);
-
-        // Load recently played tracks
-        const tracksData = await spotifyApi.getRecentlyPlayed(50);
-        setTracks(tracksData);
-
-        // Analyze tracks with Gen Z judgment
-        const analysis = genZJudge.analyzePlaylist(tracksData);
-        setJudgments(analysis.judgments);
-        setSummary(analysis.summary);
-
+        // Fetch top tracks and artists
+        const tracksData = await spotifyApi.getTopTracks(5);
+        setTopTracks(tracksData);
+        const artistsData = await spotifyApi.getTopArtists(5);
+        setTopArtists(artistsData);
+        // Aggregate albums from top tracks
+        const albumMap: { [id: string]: SpotifyAlbum } = {};
+        tracksData.forEach((track) => {
+          if (!albumMap[track.album.id]) {
+            albumMap[track.album.id] = {
+              id: track.album.id,
+              name: track.album.name,
+              images: track.album.images,
+              artists: track.artists,
+              external_urls: track.external_urls,
+            };
+          }
+        });
+        setTopAlbums(Object.values(albumMap).slice(0, 5));
+        // Aggregate genres from top artists
+        const genreCount: { [genre: string]: number } = {};
+        artistsData.forEach((artist) => {
+          artist.genres.forEach((genre: string) => {
+            genreCount[genre] = (genreCount[genre] || 0) + 1;
+          });
+        });
+        const sortedGenres = Object.entries(genreCount)
+          .sort((a, b) => b[1] - a[1])
+          .map(([genre]) => genre)
+          .slice(0, 5);
+        setTopGenres(sortedGenres);
         setLoading(false);
       } catch (err) {
-        console.error("Error loading data:", err);
         setError(
           "Failed to load your music data. Please try logging in again."
         );
         setLoading(false);
       }
     };
-
     loadData();
   }, [navigate]);
 
@@ -180,10 +201,7 @@ const Dashboard: React.FC = () => {
             color="text.primary"
             gutterBottom
           >
-            Analyzing your vibes...
-          </Typography>
-          <Typography color="text.secondary">
-            Getting the Gen Z verdict ready! ✨
+            Loading your top music...
           </Typography>
         </Paper>
       </Box>
@@ -274,108 +292,147 @@ const Dashboard: React.FC = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="md" sx={{ py: 6 }}>
-        {summary && (
-          <SpotifyPaper sx={{ mb: 6, p: 4 }}>
-            <Typography
-              variant="h4"
-              fontWeight={800}
-              sx={{ mb: 2, color: "#1db954", letterSpacing: 1 }}
-            >
-              Your Vibe Summary ✨
-            </Typography>
+      <Container maxWidth="lg" sx={{ py: 6 }}>
+        <Typography
+          variant="h2"
+          fontWeight={800}
+          align="center"
+          sx={{ mb: 6, color: "#191414", letterSpacing: 1 }}
+        >
+          top 5 songs
+        </Typography>
+        {/* Top 5 songs row */}
+        <Box
+          display="flex"
+          flexDirection="row"
+          flexWrap="wrap"
+          justifyContent="center"
+          gap={4}
+          mb={6}
+        >
+          {topTracks.map((track, idx) => (
             <Box
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-              py={6}
+              key={track.id}
+              width={{ xs: "100%", sm: "45%", md: "18%" }}
+              minWidth={220}
             >
-              <Typography variant="h3" fontWeight={700} mb={4} align="center">
-                Top 3 songs
-              </Typography>
-              <Box mb={6} width={{ xs: "90%", sm: "60%", md: "40%" }}>
-                {[0, 1, 2].map((i) => (
-                  <svg
-                    key={i}
-                    width="100%"
-                    height="32"
-                    viewBox="0 0 400 32"
-                    style={{ display: "block", marginBottom: 12 }}
-                  >
-                    <path
-                      d="M10 22 Q 100 2, 200 22 T 390 22"
-                      stroke="#222"
-                      strokeWidth="2"
-                      fill="none"
-                    />
-                  </svg>
-                ))}
-              </Box>
-              <Typography variant="h3" fontWeight={700} mb={2} align="center">
-                Who are you?
-              </Typography>
-              <Typography variant="subtitle1" align="center" mt={2}>
-                You really like .. genre, and then judge
-              </Typography>
-            </Box>
-            <Box
-              mt={4}
-              mb={2}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <TypingSummary
-                text={summary.overallVibe}
-                onDone={handleSummaryDone}
-              />
-              <BouncyEmoji bounce={emojiBounce}>🎉</BouncyEmoji>
-            </Box>
-            <Divider sx={{ my: 3, background: "rgba(255,255,255,0.2)" }} />
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight={700}
-                sx={{ color: "#fff", mb: 2 }}
+              <Card
+                sx={{ borderRadius: 4, boxShadow: 4, p: 2, minHeight: 320 }}
               >
-                <EmojiEventsIcon sx={{ mr: 1, color: "#f1c40f" }} /> Top
-                Judgments
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: 120,
+                    mb: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#f5f5dc",
+                    borderRadius: 2,
+                  }}
+                >
+                  {track.album.images?.[0]?.url ? (
+                    <img
+                      src={track.album.images[0].url}
+                      alt={track.name}
+                      style={{
+                        width: 100,
+                        height: 100,
+                        objectFit: "cover",
+                        borderRadius: 8,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                      }}
+                    />
+                  ) : (
+                    <Box
+                      sx={{
+                        width: 100,
+                        height: 100,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        border: "2px dashed #bbb",
+                        borderRadius: 8,
+                        color: "#888",
+                        fontWeight: 600,
+                        fontSize: 14,
+                        background: "#fff",
+                      }}
+                    >
+                      Submit Photo
+                    </Box>
+                  )}
+                </Box>
+                <CardContent sx={{ p: 0 }}>
+                  <Typography variant="h6" fontWeight={700} gutterBottom>
+                    {track.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Artist: {track.artists.map((a) => a.name).join(", ")}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Album: {track.album.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Genre:{" "}
+                    {topArtists.find((a) => a.name === track.artists[0]?.name)
+                      ?.genres[0] || "-"}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          ))}
+        </Box>
+        {/* 3 columns for artists, albums, genres */}
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", md: "row" }}
+          gap={4}
+          justifyContent="center"
+        >
+          <Box flex={1} minWidth={220}>
+            <Paper sx={{ p: 3, borderRadius: 4, minHeight: 220 }}>
+              <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
+                top 5 artists
               </Typography>
               <List>
-                {summary.topJudgments.map((judgment: string, index: number) => (
-                  <ListItem
-                    key={index}
-                    sx={{
-                      background: "rgba(25,20,20,0.7)",
-                      borderRadius: 2,
-                      mb: 1,
-                    }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          bgcolor: "#1db954",
-                          color: "#fff",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {index + 1}
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography color="#fff" fontWeight={600}>
-                          {judgment}
-                        </Typography>
-                      }
-                    />
+                {topArtists.map((artist, idx) => (
+                  <ListItem key={artist.id}>
+                    <ListItemText primary={artist.name} />
                   </ListItem>
                 ))}
               </List>
-            </Box>
-          </SpotifyPaper>
-        )}
+            </Paper>
+          </Box>
+          <Box flex={1} minWidth={220}>
+            <Paper sx={{ p: 3, borderRadius: 4, minHeight: 220 }}>
+              <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
+                top 5 albums
+              </Typography>
+              <List>
+                {topAlbums.map((album, idx) => (
+                  <ListItem key={album.id}>
+                    <ListItemText primary={album.name} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Box>
+          <Box flex={1} minWidth={220}>
+            <Paper sx={{ p: 3, borderRadius: 4, minHeight: 220 }}>
+              <Typography variant="h5" fontWeight={700} sx={{ mb: 2 }}>
+                top 5 genres
+              </Typography>
+              <List>
+                {topGenres.map((genre: string, idx: number) => (
+                  <ListItem key={genre}>
+                    <ListItemText primary={genre} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Box>
+        </Box>
       </Container>
     </Box>
   );

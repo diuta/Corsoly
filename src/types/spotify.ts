@@ -60,3 +60,34 @@ export interface SpotifyAuthResponse {
   refresh_token: string;
   scope: string;
 }
+
+export interface SpotifyArtist {
+  id: string;
+  name: string;
+  images: Array<{
+    url: string;
+    height: number;
+    width: number;
+  }>;
+  genres: string[];
+  external_urls: {
+    spotify: string;
+  };
+}
+
+export interface SpotifyAlbum {
+  id: string;
+  name: string;
+  images: Array<{
+    url: string;
+    height: number;
+    width: number;
+  }>;
+  artists: Array<{
+    id: string;
+    name: string;
+  }>;
+  external_urls: {
+    spotify: string;
+  };
+}

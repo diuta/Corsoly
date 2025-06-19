@@ -117,6 +117,46 @@ export class SpotifyApiService {
     localStorage.removeItem("spotify_access_token");
     localStorage.removeItem("spotify_refresh_token");
   }
+
+  // Get user's top tracks
+  async getTopTracks(
+    limit: number = 5,
+    time_range: string = "medium_term"
+  ): Promise<SpotifyTrack[]> {
+    if (!this.accessToken) {
+      throw new Error("Access token not set.");
+    }
+    const safeLimit = Math.min(limit, 50);
+    const response = await axios.get(
+      `${SPOTIFY_API_BASE}/me/top/tracks?limit=${safeLimit}&time_range=${time_range}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      }
+    );
+    return response.data.items;
+  }
+
+  // Get user's top artists
+  async getTopArtists(
+    limit: number = 5,
+    time_range: string = "medium_term"
+  ): Promise<any[]> {
+    if (!this.accessToken) {
+      throw new Error("Access token not set.");
+    }
+    const safeLimit = Math.min(limit, 50);
+    const response = await axios.get(
+      `${SPOTIFY_API_BASE}/me/top/artists?limit=${safeLimit}&time_range=${time_range}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+        },
+      }
+    );
+    return response.data.items;
+  }
 }
 
 export const spotifyApi = new SpotifyApiService();
