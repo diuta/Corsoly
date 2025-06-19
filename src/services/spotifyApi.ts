@@ -6,9 +6,10 @@ import {
   SpotifyAuthResponse,
 } from "../types/spotify";
 
+const SPOTIFY_ACCOUNTS_URL = "https://accounts.spotify.com/api/...";
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
-const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
-const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI;
+const CLIENT_ID = process.env.REACT_APP_SPOTIFY_CLIENT_ID;
+const REDIRECT_URI = process.env.REACT_APP_SPOTIFY_REDIRECT_URI;
 
 export class SpotifyApiService {
   private accessToken: string | null = null;
@@ -29,19 +30,23 @@ export class SpotifyApiService {
       show_dialog: "true",
     });
 
-    return `https://accounts.spotify.com/authorize?${params.toString()}`;
+    // Corrected the authorization URL
+    return `${SPOTIFY_ACCOUNTS_URL}/authorize?${params.toString()}`;
   }
 
   // Exchange authorization code for access token
   async exchangeCodeForToken(code: string): Promise<SpotifyAuthResponse> {
     const response = await axios.post(
-      "https://accounts.spotify.com/api/token",
-      {
+      // Corrected the token exchange URL
+      `${SPOTIFY_ACCOUNTS_URL}/api/token`,
+      new URLSearchParams({
         grant_type: "authorization_code",
         code,
-        redirect_uri: REDIRECT_URI,
-        client_id: CLIENT_ID,
-      },
+        redirect_uri: REDIRECT_URI!,
+        client_id: CLIENT_ID!,
+        // Note: For production apps, the client_secret should be handled on a secure backend,
+        // not exposed in the frontend. This example assumes a setup where this is acceptable.
+      }),
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -59,6 +64,9 @@ export class SpotifyApiService {
 
   // Get current user profile
   async getCurrentUser(): Promise<SpotifyUser> {
+    if (!this.accessToken) {
+      throw new Error("Access token not set.");
+    }
     const response = await axios.get(`${SPOTIFY_API_BASE}/me`, {
       headers: {
         Authorization: `Bearer ${this.accessToken}`,
@@ -69,6 +77,9 @@ export class SpotifyApiService {
 
   // Get recently played tracks
   async getRecentlyPlayed(limit: number = 100): Promise<SpotifyTrack[]> {
+    if (!this.accessToken) {
+      throw new Error("Access token not set.");
+    }
     const response = await axios.get<SpotifyRecentlyPlayedResponse>(
       `${SPOTIFY_API_BASE}/me/player/recently-played?limit=${limit}`,
       {
