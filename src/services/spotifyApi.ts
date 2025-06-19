@@ -85,7 +85,7 @@ export class SpotifyApiService {
   }
 
   // Get recently played tracks
-  async getRecentlyPlayed(limit: number = 100): Promise<SpotifyTrack[]> {
+  async getRecentlyPlayed(limit: number = 50): Promise<SpotifyTrack[]> {
     if (!this.accessToken) {
       throw new Error("Access token not set.");
     }
