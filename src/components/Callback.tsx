@@ -70,7 +70,7 @@ const Callback: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+        sx={{ background: "#f5f5dc" }}
       >
         <Paper
           elevation={6}
@@ -100,7 +100,7 @@ const Callback: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+        sx={{ background: "#f5f5dc" }}
       >
         <Paper
           elevation={6}
