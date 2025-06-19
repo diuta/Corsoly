@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../services/spotifyApi";
-import { genZJudge } from "../services/genZJudge";
 import {
   SpotifyUser,
   SpotifyTrack,
@@ -263,8 +262,8 @@ const Dashboard: React.FC = () => {
             fontWeight={700}
             sx={{ flexGrow: 1, color: "#fff", letterSpacing: 1 }}
           >
-            <MusicNoteIcon sx={{ mr: 1, verticalAlign: "middle" }} /> Spotify
-            Gen Z Judge
+            <MusicNoteIcon sx={{ mr: 1, verticalAlign: "middle" }} /> 
+            Lostify
           </Typography>
           {user && (
             <Box display="flex" alignItems="center" gap={2}>
@@ -300,7 +299,7 @@ const Dashboard: React.FC = () => {
           className="text-center mb-5 display-4 fw-bold"
           style={{ color: "#6d4c1c", letterSpacing: 1 }}
         >
-          top 5 songs
+          TOP 5 SONGS
         </h2>
         {/* Top 5 songs row */}
         <Row className="justify-content-center g-4 mb-5">
@@ -308,21 +307,29 @@ const Dashboard: React.FC = () => {
             <Col
               key={track.id}
               xs={12}
-              sm={10}
-              md={6}
+              sm={6}
+              md={4}
               lg={4}
-              xl={3}
-              className="d-flex align-items-stretch"
+              xl={4}
+              className="d-flex align-items-stretch mb-4"
+              style={{ maxWidth: "33.3333%" }}
             >
               <Card
                 className="shadow rounded-4 border-0 w-100 position-relative"
                 style={{
                   background: "#fffbe6",
-                  minHeight: 180,
+                  minHeight: 120,
+                  maxHeight: 160,
                   border: "2px dashed #e0cfa9",
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                <div className="d-flex flex-row align-items-center p-3">
+                <div
+                  className="d-flex flex-row align-items-center p-2"
+                  style={{ width: "100%" }}
+                >
                   <div
                     className="me-3 flex-shrink-0"
                     style={{ position: "relative" }}
@@ -332,11 +339,11 @@ const Dashboard: React.FC = () => {
                         src={track.album.images[0].url}
                         alt={track.name}
                         style={{
-                          width: 90,
-                          height: 90,
+                          width: 70,
+                          height: 70,
                           objectFit: "cover",
-                          borderRadius: 12,
-                          border: "3px solid #e0cfa9",
+                          borderRadius: 10,
+                          border: "2px solid #e0cfa9",
                           boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
                         }}
                       />
@@ -344,11 +351,11 @@ const Dashboard: React.FC = () => {
                       <div
                         className="d-flex align-items-center justify-content-center bg-light border border-2 border-secondary rounded"
                         style={{
-                          width: 90,
-                          height: 90,
+                          width: 70,
+                          height: 70,
                           color: "#bfa76a",
                           fontWeight: 600,
-                          fontSize: 14,
+                          fontSize: 12,
                         }}
                       >
                         Submit Photo
@@ -357,9 +364,9 @@ const Dashboard: React.FC = () => {
                     <span
                       style={{
                         position: "absolute",
-                        top: -12,
-                        left: -12,
-                        fontSize: 28,
+                        top: -10,
+                        left: -10,
+                        fontSize: 20,
                         filter: "drop-shadow(0 2px 4px #fffbe6)",
                       }}
                       role="img"
@@ -368,29 +375,32 @@ const Dashboard: React.FC = () => {
                       🎵
                     </span>
                   </div>
-                  <CardBody className="p-0 ps-2">
-                    <h5 className="fw-bold mb-2" style={{ color: "#6d4c1c" }}>
+                  <CardBody className="p-0 ps-2" style={{ fontSize: 13 }}>
+                    <h6
+                      className="fw-bold mb-1"
+                      style={{ color: "#6d4c1c", fontSize: 15 }}
+                    >
                       {track.name}
-                    </h5>
-                    <div className="mb-1 text-muted" style={{ fontSize: 15 }}>
+                    </h6>
+                    <div className="mb-1 text-muted" style={{ fontSize: 12 }}>
                       Artist: {track.artists.map((a) => a.name).join(", ")}
                     </div>
-                    <div className="mb-1 text-muted" style={{ fontSize: 15 }}>
+                    <div className="mb-1 text-muted" style={{ fontSize: 12 }}>
                       Album: {track.album.name}
                     </div>
-                    <div className="mb-1 text-muted" style={{ fontSize: 15 }}>
+                    <div className="mb-1 text-muted" style={{ fontSize: 12 }}>
                       Genre:{" "}
                       {topArtists.find((a) => a.name === track.artists[0]?.name)
                         ?.genres[0] || "-"}
                     </div>
-                    <div className="mt-2">
+                    <div className="mt-1">
                       <span
                         className="badge rounded-pill"
                         style={{
                           background: "#ffe6a1",
                           color: "#6d4c1c",
                           fontWeight: 600,
-                          fontSize: 13,
+                          fontSize: 11,
                         }}
                       >
                         #{idx + 1}
@@ -401,9 +411,9 @@ const Dashboard: React.FC = () => {
                 <span
                   style={{
                     position: "absolute",
-                    bottom: 10,
-                    right: 18,
-                    fontSize: 22,
+                    bottom: 6,
+                    right: 12,
+                    fontSize: 16,
                     opacity: 0.18,
                   }}
                   role="img"
@@ -415,6 +425,15 @@ const Dashboard: React.FC = () => {
             </Col>
           ))}
         </Row>
+        <style>{`
+          @media (min-width: 768px) {
+            .row.justify-content-center.g-4.mb-5 > .col-md-4:nth-child(4),
+            .row.justify-content-center.g-4.mb-5 > .col-md-4:nth-child(5) {
+              max-width: 50%;
+              flex: 0 0 50%;
+            }
+          }
+        `}</style>
         {/* 3 columns for artists, albums, genres */}
         <Row className="justify-content-center g-4">
           <Col xs={12} md={4} className="d-flex align-items-stretch">
@@ -428,7 +447,7 @@ const Dashboard: React.FC = () => {
             >
               <CardBody>
                 <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
-                  top 5 artists
+                  TOP 5 ARTISTS
                 </h4>
                 <ul className="list-unstyled mb-0">
                   {topArtists.map((artist, idx) => (
@@ -464,7 +483,7 @@ const Dashboard: React.FC = () => {
             >
               <CardBody>
                 <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
-                  top 5 albums
+                  TOP 5 ALBUMS
                 </h4>
                 <ul className="list-unstyled mb-0">
                   {topAlbums.map((album, idx) => (
@@ -500,7 +519,7 @@ const Dashboard: React.FC = () => {
             >
               <CardBody>
                 <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
-                  top 5 genres
+                  TOP 5 GENRES
                 </h4>
                 <ul className="list-unstyled mb-0">
                   {topGenres.map((genre, idx) => (
