@@ -250,7 +250,7 @@ const Dashboard: React.FC = () => {
   return (
     <Box
       minHeight="100vh"
-      sx={{ background: "linear-gradient(135deg, #1db954 0%, #191414 100%)" }}
+      sx={{ background: "#f5f5dc" }}
     >
       <AppBar
         position="static"
