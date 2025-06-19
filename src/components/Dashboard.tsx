@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../services/spotifyApi";
 import { genZJudge } from "../services/genZJudge";
@@ -26,9 +26,18 @@ import {
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { styled } from "@mui/material/styles";
+// @ts-ignore
+import confetti from "canvas-confetti";
 
-const TypingSummary = ({ text }: { text: string }) => {
+const TypingSummary = ({
+  text,
+  onDone,
+}: {
+  text: string;
+  onDone: () => void;
+}) => {
   const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
   useEffect(() => {
     let i = 0;
     let current = "";
@@ -40,9 +49,12 @@ const TypingSummary = ({ text }: { text: string }) => {
         i++;
       } else {
         clearInterval(interval);
+        setDone(true);
+        onDone();
       }
     }, 180);
     return () => clearInterval(interval);
+    // eslint-disable-next-line
   }, [text]);
   return (
     <Typography
@@ -61,6 +73,24 @@ const SpotifyPaper = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[4],
 }));
 
+const BouncyEmoji = styled("span")<any>(
+  ({ theme, bounce }: { bounce: boolean }) => ({
+    display: "inline-block",
+    fontSize: 36,
+    marginLeft: 8,
+    animation: bounce
+      ? "bounce-emoji 0.7s cubic-bezier(.36,.07,.19,.97) both"
+      : "none",
+    "@keyframes bounce-emoji": {
+      "0%": { transform: "translateY(0)" },
+      "30%": { transform: "translateY(-20px)" },
+      "50%": { transform: "translateY(0)" },
+      "70%": { transform: "translateY(-10px)" },
+      "100%": { transform: "translateY(0)" },
+    },
+  })
+);
+
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<SpotifyUser | null>(null);
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
@@ -68,6 +98,9 @@ const Dashboard: React.FC = () => {
   const [summary, setSummary] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [emojiBounce, setEmojiBounce] = useState(false);
+  const confettiFired = useRef(false);
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -112,6 +145,21 @@ const Dashboard: React.FC = () => {
   const handleLogout = () => {
     spotifyApi.logout();
     navigate("/");
+  };
+
+  const handleSummaryDone = () => {
+    if (!confettiFired.current) {
+      setShowConfetti(true);
+      setEmojiBounce(true);
+      confettiFired.current = true;
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ["#1db954", "#191414", "#fff", "#f1c40f", "#e84393"],
+      });
+      setTimeout(() => setEmojiBounce(false), 900);
+    }
   };
 
   if (loading) {
@@ -275,8 +323,18 @@ const Dashboard: React.FC = () => {
                 <Typography color="#fff">Different Vibes</Typography>
               </Grid>
             </Grid>
-            <Box mt={4} mb={2}>
-              <TypingSummary text={summary.overallVibe} />
+            <Box
+              mt={4}
+              mb={2}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <TypingSummary
+                text={summary.overallVibe}
+                onDone={handleSummaryDone}
+              />
+              <BouncyEmoji bounce={emojiBounce}>🎉</BouncyEmoji>
             </Box>
             <Divider sx={{ my: 3, background: "rgba(255,255,255,0.2)" }} />
             <Box>
