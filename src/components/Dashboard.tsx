@@ -32,6 +32,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import confetti from "canvas-confetti";
 import { Row, Col, Card, CardBody, CardImg } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import bg from "./static/bg.png";
 
 const TypingSummary = ({
   text,
@@ -187,7 +188,12 @@ const Dashboard: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "#f5f5dc" }}
+        sx={{
+          backgroundImage: `url(${bg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <Paper
           elevation={6}
@@ -214,7 +220,12 @@ const Dashboard: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "#f5f5dc" }}
+        sx={{
+          backgroundImage: `url(${bg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <Paper
           elevation={6}
@@ -248,7 +259,15 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <Box minHeight="100vh" sx={{ background: "#f5f5dc" }}>
+    <Box
+      minHeight="100vh"
+      sx={{
+        backgroundImage: `url(${bg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <AppBar
         position="static"
         sx={{ background: "#191414", boxShadow: "none" }}
@@ -289,7 +308,10 @@ const Dashboard: React.FC = () => {
         </Toolbar>
       </AppBar>
       <div className="container py-5">
-        <div className="mb-2" style={{ color: "#7a5a2f", fontSize: 16 }}>
+        <div
+          className="text-center mb-2"
+          style={{ color: "#7a5a2f", fontSize: 16 }}
+        >
           Based on 1 month of your music listening history....
         </div>
         <h2

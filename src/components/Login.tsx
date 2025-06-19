@@ -2,6 +2,7 @@ import React from "react";
 import { spotifyApi } from "../services/spotifyApi";
 import { Row, Col, Card, CardBody, Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import bg from "./static/bg.png";
 
 interface LoginProps {
   onLogin: () => void;
@@ -16,7 +17,13 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   return (
     <div
       className="container-fluid d-flex align-items-center justify-content-center"
-      style={{ minHeight: "100vh", background: "#f5f5dc" }}
+      style={{
+        minHeight: "100vh",
+        backgroundImage: `url(${bg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
       <div className="container" style={{ maxWidth: 480 }}>
         <Card

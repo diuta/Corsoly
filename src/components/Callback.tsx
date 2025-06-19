@@ -8,6 +8,7 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
+import bg from "./static/bg.png";
 
 const Callback: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -70,7 +71,12 @@ const Callback: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "#f5f5dc" }}
+        sx={{
+          backgroundImage: `url(${bg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <Paper
           elevation={6}
@@ -100,7 +106,12 @@ const Callback: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        sx={{ background: "#f5f5dc" }}
+        sx={{
+          backgroundImage: `url(${bg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <Paper
           elevation={6}
