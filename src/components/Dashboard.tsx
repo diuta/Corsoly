@@ -71,7 +71,7 @@ const TypingSummary = ({
 };
 
 const SpotifyPaper = styled(Paper)(({ theme }) => ({
-  background: "linear-gradient(135deg, #1db954 0%, #191414 100%)",
+  background: "#f5f5dc",
   color: "#fff",
   borderRadius: 20,
   boxShadow: theme.shadows[4],
