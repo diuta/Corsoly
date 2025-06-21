@@ -103,8 +103,8 @@ const DashboardSample: React.FC = () => {
     borderRadius: 4,
     boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
     height: "100%",
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   };
 
   return (
@@ -123,11 +123,16 @@ const DashboardSample: React.FC = () => {
       >
         <Toolbar>
           <Typography
-            variant="h5"
+            variant="body1"
             fontWeight={700}
-            sx={{ flexGrow: 1, color: "#fff", letterSpacing: 1 }}
+            sx={{
+              flexGrow: 1,
+              color: "#fff",
+              letterSpacing: 1,
+              fontSize: { xs: 12, sm: 20 },
+            }}
           >
-            <MusicNoteIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+            <MusicNoteIcon fontSize="inherit" sx={{ mr: 1, verticalAlign: "middle" }} />
             Corsoly
           </Typography>
           <Box display="flex" alignItems="center" gap={2}>
@@ -195,10 +200,10 @@ const DashboardSample: React.FC = () => {
                 sx={{
                   ...cardStyles,
                   position: "relative",
-                  flexDirection: 'row',
-                  alignItems: 'center',
+                  flexDirection: "row",
+                  alignItems: "center",
                   p: { xs: 1, sm: 1.5 },
-                  minHeight: { xs: 100, sm: 120 }
+                  minHeight: { xs: 100, sm: 120 },
                 }}
               >
                 <Box
@@ -221,9 +226,20 @@ const DashboardSample: React.FC = () => {
                       boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
                     }}
                   />
-                   <Typography component="span" sx={{ position: 'absolute', top: -10, left: -10, fontSize: {xs: 16, sm: 20}, filter: 'drop-shadow(0 2px 4px #fffbe6)'}}>🎵</Typography>
+                  <Typography
+                    component="span"
+                    sx={{
+                      position: "absolute",
+                      top: -10,
+                      left: -10,
+                      fontSize: { xs: 16, sm: 20 },
+                      filter: "drop-shadow(0 2px 4px #fffbe6)",
+                    }}
+                  >
+                    🎵
+                  </Typography>
                 </Box>
-                <CardContent sx={{ p: '0 !important', flex: 1, minWidth: 0 }}>
+                <CardContent sx={{ p: "0 !important", flex: 1, minWidth: 0 }}>
                   <Typography
                     noWrap
                     fontWeight="bold"
@@ -231,14 +247,35 @@ const DashboardSample: React.FC = () => {
                   >
                     {track.name}
                   </Typography>
-                  <Typography noWrap sx={{ color: "text.secondary", fontSize: { xs: 10, sm: 12 } }}>
+                  <Typography
+                    noWrap
+                    sx={{
+                      color: "text.secondary",
+                      fontSize: { xs: 10, sm: 12 },
+                    }}
+                  >
                     Artist: {track.artists.map((a) => a.name).join(", ")}
                   </Typography>
-                   <Typography noWrap sx={{ color: "text.secondary", fontSize: { xs: 10, sm: 12 } }}>
+                  <Typography
+                    noWrap
+                    sx={{
+                      color: "text.secondary",
+                      fontSize: { xs: 10, sm: 12 },
+                    }}
+                  >
                     Album: {track.album.name}
                   </Typography>
-                  <Typography noWrap sx={{ color: "text.secondary", fontSize: { xs: 10, sm: 12 } }}>
-                    Genre: {sampleTopArtists.find(a => a.name === track.artists[0]?.name)?.genres[0] || "-"}
+                  <Typography
+                    noWrap
+                    sx={{
+                      color: "text.secondary",
+                      fontSize: { xs: 10, sm: 12 },
+                    }}
+                  >
+                    Genre:{" "}
+                    {sampleTopArtists.find(
+                      (a) => a.name === track.artists[0]?.name
+                    )?.genres[0] || "-"}
                   </Typography>
                   <Box
                     sx={{
@@ -247,16 +284,27 @@ const DashboardSample: React.FC = () => {
                       color: "#6d4c1c",
                       fontWeight: 600,
                       fontSize: { xs: 9, sm: 11 },
-                      borderRadius: '16px',
+                      borderRadius: "16px",
                       px: 1,
                       py: 0.2,
-                      display: 'inline-block'
+                      display: "inline-block",
                     }}
                   >
                     #{idx + 1}
                   </Box>
                 </CardContent>
-                <Typography component="span" sx={{ position: 'absolute', bottom: 6, right: 12, fontSize: { xs: 12, sm: 16 }, opacity: 0.18 }}>⭐</Typography>
+                <Typography
+                  component="span"
+                  sx={{
+                    position: "absolute",
+                    bottom: 6,
+                    right: 12,
+                    fontSize: { xs: 12, sm: 16 },
+                    opacity: 0.18,
+                  }}
+                >
+                  ⭐
+                </Typography>
               </Card>
             </Grid>
           ))}
@@ -268,14 +316,35 @@ const DashboardSample: React.FC = () => {
           <Grid item xs={4}>
             <Card sx={cardStyles}>
               <CardContent>
-                <Typography variant="h6" fontWeight="bold" sx={{ color: "#6d4c1c", mb: 2, fontSize: {xs: 16, sm: 20} }}>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{ color: "#6d4c1c", mb: 2, fontSize: { xs: 16, sm: 20 } }}
+                >
                   TOP 5 ARTISTS
                 </Typography>
-                <Box component="ul" sx={{ p: 0, m: 0, listStyle: 'none' }}>
+                <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
                   {sampleTopArtists.map((artist) => (
-                     <Box component="li" key={artist.id} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <Typography component="span" sx={{ mr: 1.5, fontSize: {xs: 16, sm: 18} }}>🎤</Typography>
-                        <Typography sx={{ color: "#7a5a2f", fontWeight: 500, fontSize: {xs: 12, sm: 14} }}>{artist.name}</Typography>
+                    <Box
+                      component="li"
+                      key={artist.id}
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                    >
+                      <Typography
+                        component="span"
+                        sx={{ mr: 1.5, fontSize: { xs: 16, sm: 18 } }}
+                      >
+                        🎤
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#7a5a2f",
+                          fontWeight: 500,
+                          fontSize: { xs: 12, sm: 14 },
+                        }}
+                      >
+                        {artist.name}
+                      </Typography>
                     </Box>
                   ))}
                 </Box>
@@ -287,14 +356,35 @@ const DashboardSample: React.FC = () => {
           <Grid item xs={4}>
             <Card sx={cardStyles}>
               <CardContent>
-                <Typography variant="h6" fontWeight="bold" sx={{ color: "#6d4c1c", mb: 2, fontSize: {xs: 16, sm: 20} }}>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{ color: "#6d4c1c", mb: 2, fontSize: { xs: 16, sm: 20 } }}
+                >
                   TOP 5 ALBUMS
                 </Typography>
-                <Box component="ul" sx={{ p: 0, m: 0, listStyle: 'none' }}>
+                <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
                   {sampleTopAlbums.map((album) => (
-                     <Box component="li" key={album.id} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <Typography component="span" sx={{ mr: 1.5, fontSize: {xs: 16, sm: 18} }}>💿</Typography>
-                        <Typography sx={{ color: "#7a5a2f", fontWeight: 500, fontSize: {xs: 12, sm: 14} }}>{album.name}</Typography>
+                    <Box
+                      component="li"
+                      key={album.id}
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                    >
+                      <Typography
+                        component="span"
+                        sx={{ mr: 1.5, fontSize: { xs: 16, sm: 18 } }}
+                      >
+                        💿
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#7a5a2f",
+                          fontWeight: 500,
+                          fontSize: { xs: 12, sm: 14 },
+                        }}
+                      >
+                        {album.name}
+                      </Typography>
                     </Box>
                   ))}
                 </Box>
@@ -306,15 +396,36 @@ const DashboardSample: React.FC = () => {
           <Grid item xs={4}>
             <Card sx={cardStyles}>
               <CardContent>
-                <Typography variant="h6" fontWeight="bold" sx={{ color: "#6d4c1c", mb: 2, fontSize: {xs: 16, sm: 20} }}>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{ color: "#6d4c1c", mb: 2, fontSize: { xs: 16, sm: 20 } }}
+                >
                   TOP 5 GENRES
                 </Typography>
-                 <Box component="ul" sx={{ p: 0, m: 0, listStyle: 'none' }}>
+                <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
                   {sampleTopGenres.map((genre) => (
-                    <Box component="li" key={genre} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                       <Typography component="span" sx={{ mr: 1.5, fontSize: {xs: 16, sm: 18} }}>🏷️</Typography>
-                       <Typography sx={{ color: "#7a5a2f", fontWeight: 500, fontSize: {xs: 12, sm: 14} }}>{genre}</Typography>
-                   </Box>
+                    <Box
+                      component="li"
+                      key={genre}
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                    >
+                      <Typography
+                        component="span"
+                        sx={{ mr: 1.5, fontSize: { xs: 16, sm: 18 } }}
+                      >
+                        🏷️
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#7a5a2f",
+                          fontWeight: 500,
+                          fontSize: { xs: 12, sm: 14 },
+                        }}
+                      >
+                        {genre}
+                      </Typography>
+                    </Box>
                   ))}
                 </Box>
               </CardContent>

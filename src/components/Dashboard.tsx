@@ -198,11 +198,16 @@ const Dashboard: React.FC = () => {
       >
         <Toolbar>
           <Typography
-            variant="h5"
+            variant="body1"
             fontWeight={700}
-            sx={{ flexGrow: 1, color: "#fff", letterSpacing: 1 }}
+            sx={{
+              flexGrow: 1,
+              color: "#fff",
+              letterSpacing: 1,
+              fontSize: { xs: 12, sm: 20 },
+            }}
           >
-            <MusicNoteIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+            <MusicNoteIcon fontSize="inherit" sx={{ mr: 1, verticalAlign: "middle" }} />
             Corsoly
           </Typography>
           {user && (
