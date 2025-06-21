@@ -206,7 +206,7 @@ const Dashboard: React.FC = () => {
                 sx={{
                   color: "#fff",
                   fontWeight: 600,
-                  fontFamily: "Poppins, sans-serif",
+                  fontFamily: "Arial, sans-serif",
                   fontSize: 14,
                   letterSpacing: 1,
                 }}
@@ -225,8 +225,8 @@ const Dashboard: React.FC = () => {
               background: "#1db954",
               color: "#fff",
               "&:hover": { background: "#1ed760" },
-              fontFamily: "Poppins, sans-serif",
-              fontSize: 14,
+              fontFamily: "Arial, sans-serif",
+              fontSize: 10,
               letterSpacing: 1,
             }}
           >
