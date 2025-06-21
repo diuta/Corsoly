@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { spotifyApi } from "../services/spotifyApi";
 import {
@@ -14,19 +14,16 @@ import {
   Typography,
   Avatar,
   Button,
-  Paper,
-  CircularProgress,
   Container,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Divider,
+  Card,
+  CardContent,
+  CardMedia,
+  Grid,
+  CircularProgress,
+  Paper,
   useTheme,
 } from "@mui/material";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import { Row, Col, Card, CardBody, CardImg } from "reactstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import bg from "./Static/bg.png";
 
 const Dashboard: React.FC = () => {
@@ -38,6 +35,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     const loadData = async () => {
@@ -95,6 +93,16 @@ const Dashboard: React.FC = () => {
   const handleLogout = () => {
     spotifyApi.logout();
     navigate("/");
+  };
+
+  const cardStyles = {
+    background: "#fffbe6",
+    border: "2px dashed #e0cfa9",
+    borderRadius: 4,
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   };
 
   if (loading) {
@@ -206,7 +214,7 @@ const Dashboard: React.FC = () => {
                 sx={{
                   color: "#fff",
                   fontFamily: "Arial, sans-serif",
-                  fontSize: 14,
+                  fontSize: { xs: 12, sm: 14 },
                   fontWeight: 600,
                   letterSpacing: 1,
                 }}
@@ -225,271 +233,297 @@ const Dashboard: React.FC = () => {
               color: "#fff",
               "&:hover": { background: "#1ed760" },
               fontFamily: "Arial, sans-serif",
-              fontSize: 12,
+              fontSize: { xs: 11, sm: 12 },
               fontWeight: 700,
               letterSpacing: 1,
-              paddingX: 3,
+              paddingX: { xs: 2, sm: 3 },
             }}
           >
             Logout
           </Button>
         </Toolbar>
       </AppBar>
-      <div className="container py-5">
-        <div
-          className="text-center mb-2"
-          style={{ color: "#7a5a2f", fontSize: 16 }}
+
+      <Container sx={{ py: 5 }}>
+        <Typography
+          align="center"
+          sx={{ color: "#7a5a2f", fontSize: { xs: 14, sm: 16 }, mb: 1 }}
         >
           Based on 1 month of your music listening history....
-        </div>
-        <h2
-          className="text-center mb-5 display-4 fw-bold"
-          style={{ color: "#6d4c1c", letterSpacing: 1 }}
+        </Typography>
+        <Typography
+          align="center"
+          fontWeight="bold"
+          sx={{
+            color: "#6d4c1c",
+            letterSpacing: 1,
+            mb: 5,
+            typography: { xs: "h4", sm: "h2" },
+          }}
         >
           TOP 5 SONGS
-        </h2>
-        {/* Top 5 songs */}
-        <Row className="justify-content-center g-4 mb-5">
+        </Typography>
+
+        {/* --- Top 5 Songs Grid --- */}
+        <Grid container spacing={2} justifyContent="center" sx={{ mb: 5 }}>
           {topTracks.map((track, idx) => (
-            <Col
-              key={track.id}
-              xs={12}
-              sm={6}
-              md={4}
-              lg={4}
-              xl={4}
-              className="d-flex align-items-stretch mb-4"
-              style={{ maxWidth: "33.3333%" }}
-            >
+            <Grid item xs={12} sm={6} md={4} key={track.id}>
               <Card
-                className="shadow rounded-4 border-0 w-100 position-relative"
-                style={{
-                  background: "#fffbe6",
-                  minHeight: 120,
-                  maxHeight: 160,
-                  border: "2px dashed #e0cfa9",
-                  display: "flex",
+                sx={{
+                  ...cardStyles,
+                  position: "relative",
                   flexDirection: "row",
                   alignItems: "center",
+                  p: { xs: 1, sm: 1.5 },
+                  minHeight: { xs: 100, sm: 120 },
                 }}
               >
-                <div
-                  className="d-flex flex-row align-items-center p-2"
-                  style={{ width: "100%" }}
+                <Box
+                  sx={{
+                    position: "relative",
+                    mr: { xs: 1, sm: 2 },
+                    flexShrink: 0,
+                  }}
                 >
-                  <div
-                    className="me-3 flex-shrink-0"
-                    style={{ position: "relative" }}
-                  >
-                    {track.album.images?.[0]?.url ? (
-                      <CardImg
-                        src={track.album.images[0].url}
-                        alt={track.name}
-                        style={{
-                          width: 70,
-                          height: 70,
-                          objectFit: "cover",
-                          borderRadius: 10,
-                          border: "2px solid #e0cfa9",
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
-                        }}
-                      />
-                    ) : (
-                      <div
-                        className="d-flex align-items-center justify-content-center bg-light border border-2 border-secondary rounded"
-                        style={{
-                          width: 70,
-                          height: 70,
-                          color: "#bfa76a",
-                          fontWeight: 600,
-                          fontSize: 12,
-                        }}
-                      >
-                        Submit Photo
-                      </div>
-                    )}
-                    <span
-                      style={{
-                        position: "absolute",
-                        top: -10,
-                        left: -10,
-                        fontSize: 20,
-                        filter: "drop-shadow(0 2px 4px #fffbe6)",
+                  {track.album.images?.[0]?.url ? (
+                    <CardMedia
+                      component="img"
+                      image={track.album.images[0].url}
+                      alt={track.name}
+                      sx={{
+                        width: { xs: 50, sm: 70 },
+                        height: { xs: 50, sm: 70 },
+                        objectFit: "cover",
+                        borderRadius: 2,
+                        border: "2px solid #e0cfa9",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
                       }}
-                      role="img"
-                      aria-label="music"
+                    />
+                  ) : (
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      sx={{
+                        width: { xs: 50, sm: 70 },
+                        height: { xs: 50, sm: 70 },
+                        background: "#f5f5f5",
+                        border: "2px solid #e0cfa9",
+                        borderRadius: 2,
+                        color: "#bfa76a",
+                        fontWeight: 600,
+                        fontSize: { xs: 10, sm: 12 },
+                      }}
                     >
-                      🎵
-                    </span>
-                  </div>
-                  <CardBody className="p-0 ps-2" style={{ fontSize: 13 }}>
-                    <h6
-                      className="fw-bold mb-1"
-                      style={{ color: "#6d4c1c", fontSize: 15 }}
-                    >
-                      {track.name}
-                    </h6>
-                    <div className="mb-1 text-muted" style={{ fontSize: 12 }}>
-                      Artist: {track.artists.map((a) => a.name).join(", ")}
-                    </div>
-                    <div className="mb-1 text-muted" style={{ fontSize: 12 }}>
-                      Album: {track.album.name}
-                    </div>
-                    <div className="mb-1 text-muted" style={{ fontSize: 12 }}>
-                      Genre:{" "}
-                      {topArtists.find((a) => a.name === track.artists[0]?.name)
-                        ?.genres[0] || "-"}
-                    </div>
-                    <div className="mt-1">
-                      <span
-                        className="badge rounded-pill"
-                        style={{
-                          background: "#ffe6a1",
-                          color: "#6d4c1c",
-                          fontWeight: 600,
-                          fontSize: 11,
-                        }}
-                      >
-                        #{idx + 1}
-                      </span>
-                    </div>
-                  </CardBody>
-                </div>
-                <span
-                  style={{
+                      No Photo
+                    </Box>
+                  )}
+                  <Typography
+                    component="span"
+                    sx={{
+                      position: "absolute",
+                      top: -10,
+                      left: -10,
+                      fontSize: { xs: 16, sm: 20 },
+                      filter: "drop-shadow(0 2px 4px #fffbe6)",
+                    }}
+                  >
+                    🎵
+                  </Typography>
+                </Box>
+                <CardContent sx={{ p: "0 !important", flex: 1, minWidth: 0 }}>
+                  <Typography
+                    noWrap
+                    fontWeight="bold"
+                    sx={{ color: "#6d4c1c", fontSize: { xs: 12, sm: 15 } }}
+                  >
+                    {track.name}
+                  </Typography>
+                  <Typography
+                    noWrap
+                    sx={{
+                      color: "text.secondary",
+                      fontSize: { xs: 10, sm: 12 },
+                    }}
+                  >
+                    Artist: {track.artists.map((a) => a.name).join(", ")}
+                  </Typography>
+                  <Typography
+                    noWrap
+                    sx={{
+                      color: "text.secondary",
+                      fontSize: { xs: 10, sm: 12 },
+                    }}
+                  >
+                    Album: {track.album.name}
+                  </Typography>
+                  <Typography
+                    noWrap
+                    sx={{
+                      color: "text.secondary",
+                      fontSize: { xs: 10, sm: 12 },
+                    }}
+                  >
+                    Genre:{" "}
+                    {topArtists.find((a) => a.name === track.artists[0]?.name)
+                      ?.genres[0] || "-"}
+                  </Typography>
+                  <Box
+                    sx={{
+                      mt: 0.5,
+                      background: "#ffe6a1",
+                      color: "#6d4c1c",
+                      fontWeight: 600,
+                      fontSize: { xs: 9, sm: 11 },
+                      borderRadius: "16px",
+                      px: 1,
+                      py: 0.2,
+                      display: "inline-block",
+                    }}
+                  >
+                    #{idx + 1}
+                  </Box>
+                </CardContent>
+                <Typography
+                  component="span"
+                  sx={{
                     position: "absolute",
                     bottom: 6,
                     right: 12,
-                    fontSize: 16,
+                    fontSize: { xs: 12, sm: 16 },
                     opacity: 0.18,
                   }}
-                  role="img"
-                  aria-label="star"
                 >
                   ⭐
-                </span>
+                </Typography>
               </Card>
-            </Col>
+            </Grid>
           ))}
-        </Row>
-        <style>{`
-          @media (min-width: 768px) {
-            .row.justify-content-center.g-4.mb-5 > .col-md-4:nth-child(4),
-            .row.justify-content-center.g-4.mb-5 > .col-md-4:nth-child(5) {
-              max-width: 50%;
-              flex: 0 0 50%;
-            }
-          }
-        `}</style>
-        {/* artists, albums, genres */}
-        <Row className="justify-content-center g-4">
-          <Col xs={12} md={4} className="d-flex align-items-stretch">
-            <Card
-              className="shadow rounded-4 border-0 w-100"
-              style={{
-                background: "#fffbe6",
-                minHeight: 220,
-                border: "2px dashed #e0cfa9",
-              }}
-            >
-              <CardBody>
-                <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
+        </Grid>
+
+        {/* --- Artists, Albums, Genres Grid --- */}
+        <Grid container spacing={2} justifyContent="center">
+          {/* Top 5 Artists */}
+          <Grid item xs={12} md={4}>
+            <Card sx={cardStyles}>
+              <CardContent>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{ color: "#6d4c1c", mb: 2, fontSize: { xs: 16, sm: 20 } }}
+                >
                   TOP 5 ARTISTS
-                </h4>
-                <ul className="list-unstyled mb-0">
-                  {topArtists.map((artist, idx) => (
-                    <li
+                </Typography>
+                <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
+                  {topArtists.map((artist) => (
+                    <Box
+                      component="li"
                       key={artist.id}
-                      className="mb-2 d-flex align-items-center"
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
                     >
-                      <span
-                        className="me-2"
-                        style={{ fontSize: 18 }}
-                        role="img"
-                        aria-label="artist"
+                      <Typography
+                        component="span"
+                        sx={{ mr: 1.5, fontSize: { xs: 16, sm: 18 } }}
                       >
                         🎤
-                      </span>
-                      <span style={{ color: "#7a5a2f", fontWeight: 500 }}>
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#7a5a2f",
+                          fontWeight: 500,
+                          fontSize: { xs: 12, sm: 14 },
+                        }}
+                      >
                         {artist.name}
-                      </span>
-                    </li>
+                      </Typography>
+                    </Box>
                   ))}
-                </ul>
-              </CardBody>
+                </Box>
+              </CardContent>
             </Card>
-          </Col>
-          <Col xs={12} md={4} className="d-flex align-items-stretch">
-            <Card
-              className="shadow rounded-4 border-0 w-100"
-              style={{
-                background: "#fffbe6",
-                minHeight: 220,
-                border: "2px dashed #e0cfa9",
-              }}
-            >
-              <CardBody>
-                <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
+          </Grid>
+
+          {/* Top 5 Albums */}
+          <Grid item xs={12} md={4}>
+            <Card sx={cardStyles}>
+              <CardContent>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{ color: "#6d4c1c", mb: 2, fontSize: { xs: 16, sm: 20 } }}
+                >
                   TOP 5 ALBUMS
-                </h4>
-                <ul className="list-unstyled mb-0">
-                  {topAlbums.map((album, idx) => (
-                    <li
+                </Typography>
+                <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
+                  {topAlbums.map((album) => (
+                    <Box
+                      component="li"
                       key={album.id}
-                      className="mb-2 d-flex align-items-center"
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
                     >
-                      <span
-                        className="me-2"
-                        style={{ fontSize: 18 }}
-                        role="img"
-                        aria-label="album"
+                      <Typography
+                        component="span"
+                        sx={{ mr: 1.5, fontSize: { xs: 16, sm: 18 } }}
                       >
                         💿
-                      </span>
-                      <span style={{ color: "#7a5a2f", fontWeight: 500 }}>
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#7a5a2f",
+                          fontWeight: 500,
+                          fontSize: { xs: 12, sm: 14 },
+                        }}
+                      >
                         {album.name}
-                      </span>
-                    </li>
+                      </Typography>
+                    </Box>
                   ))}
-                </ul>
-              </CardBody>
+                </Box>
+              </CardContent>
             </Card>
-          </Col>
-          <Col xs={12} md={4} className="d-flex align-items-stretch">
-            <Card
-              className="shadow rounded-4 border-0 w-100"
-              style={{
-                background: "#fffbe6",
-                minHeight: 220,
-                border: "2px dashed #e0cfa9",
-              }}
-            >
-              <CardBody>
-                <h4 className="fw-bold mb-3" style={{ color: "#6d4c1c" }}>
+          </Grid>
+
+          {/* Top 5 Genres */}
+          <Grid item xs={12} md={4}>
+            <Card sx={cardStyles}>
+              <CardContent>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{ color: "#6d4c1c", mb: 2, fontSize: { xs: 16, sm: 20 } }}
+                >
                   TOP 5 GENRES
-                </h4>
-                <ul className="list-unstyled mb-0">
-                  {topGenres.map((genre, idx) => (
-                    <li key={genre} className="mb-2 d-flex align-items-center">
-                      <span
-                        className="me-2"
-                        style={{ fontSize: 18 }}
-                        role="img"
-                        aria-label="genre"
+                </Typography>
+                <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none" }}>
+                  {topGenres.map((genre) => (
+                    <Box
+                      component="li"
+                      key={genre}
+                      sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                    >
+                      <Typography
+                        component="span"
+                        sx={{ mr: 1.5, fontSize: { xs: 16, sm: 18 } }}
                       >
                         🏷️
-                      </span>
-                      <span style={{ color: "#7a5a2f", fontWeight: 500 }}>
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#7a5a2f",
+                          fontWeight: 500,
+                          fontSize: { xs: 12, sm: 14 },
+                        }}
+                      >
                         {genre}
-                      </span>
-                    </li>
+                      </Typography>
+                    </Box>
                   ))}
-                </ul>
-              </CardBody>
+                </Box>
+              </CardContent>
             </Card>
-          </Col>
-        </Row>
-      </div>
+          </Grid>
+        </Grid>
+      </Container>
     </Box>
   );
 };
