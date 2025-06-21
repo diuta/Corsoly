@@ -34,10 +34,8 @@ const Callback: React.FC = () => {
           return;
         }
 
-        // Exchange code for token
         const tokenResponse = await spotifyApi.exchangeCodeForToken(code);
 
-        // Store tokens
         localStorage.setItem(
           "spotify_access_token",
           tokenResponse.access_token
@@ -49,10 +47,8 @@ const Callback: React.FC = () => {
           );
         }
 
-        // Set token in API service
         spotifyApi.setAccessToken(tokenResponse.access_token);
 
-        // Redirect to dashboard
         navigate("/dashboard");
       } catch (err) {
         console.error("Error during callback:", err);
@@ -90,9 +86,6 @@ const Callback: React.FC = () => {
             gutterBottom
           >
             Connecting to Spotify...
-          </Typography>
-          <Typography color="text.secondary">
-            Getting your vibes ready! ✨
           </Typography>
         </Paper>
       </Box>

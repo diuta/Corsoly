@@ -23,7 +23,6 @@ function checkEnvVars() {
 export class SpotifyApiService {
   private accessToken: string | null = null;
 
-  // Generate Spotify authorization URL
   generateAuthUrl(): string {
     checkEnvVars();
     const scopes = [
@@ -44,10 +43,8 @@ export class SpotifyApiService {
     return `${SPOTIFY_ACCOUNTS_URL}/authorize?${params.toString()}`;
   }
 
-  // Exchange authorization code for access token
   async exchangeCodeForToken(code: string): Promise<SpotifyAuthResponse> {
     checkEnvVars();
-    // WARNING: Never expose client_secret in frontend code in production!
     const response = await axios.post(
       `${SPOTIFY_ACCOUNTS_URL}/api/token`,
       new URLSearchParams({
@@ -67,12 +64,10 @@ export class SpotifyApiService {
     return response.data;
   }
 
-  // Set access token
   setAccessToken(token: string): void {
     this.accessToken = token;
   }
 
-  // Get current user profile
   async getCurrentUser(): Promise<SpotifyUser> {
     if (!this.accessToken) {
       throw new Error("Access token not set.");
@@ -85,41 +80,16 @@ export class SpotifyApiService {
     return response.data;
   }
 
-  // Get recently played tracks
-  async getRecentlyPlayed(limit: number = 50): Promise<SpotifyTrack[]> {
-    if (!this.accessToken) {
-      throw new Error("Access token not set.");
-    }
-    // Ensure limit does not exceed 50
-    const safeLimit = Math.min(limit, 50);
-    const response = await axios.get<SpotifyRecentlyPlayedResponse>(
-      `${SPOTIFY_API_BASE}/me/player/recently-played?limit=${safeLimit}`,
-      {
-        headers: {
-          Authorization: `Bearer ${this.accessToken}`,
-        },
-      }
-    );
-
-    return response.data.items.map((item) => ({
-      ...item.track,
-      played_at: item.played_at,
-    }));
-  }
-
-  // Check if user is authenticated
   isAuthenticated(): boolean {
     return !!this.accessToken;
   }
 
-  // Clear authentication
   logout(): void {
     this.accessToken = null;
     localStorage.removeItem("spotify_access_token");
     localStorage.removeItem("spotify_refresh_token");
   }
 
-  // Get user's top tracks
   async getTopTracks(
     limit: number = 5,
     time_range: string = "medium_term"
@@ -139,7 +109,6 @@ export class SpotifyApiService {
     return response.data.items;
   }
 
-  // Get user's top artists
   async getTopArtists(
     limit: number = 5,
     time_range: string = "medium_term"

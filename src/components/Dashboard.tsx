@@ -34,66 +34,6 @@ import { Row, Col, Card, CardBody, CardImg } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import bg from "./Static/bg.png";
 
-const TypingSummary = ({
-  text,
-  onDone,
-}: {
-  text: string;
-  onDone: () => void;
-}) => {
-  const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
-  useEffect(() => {
-    let i = 0;
-    let current = "";
-    const words = text.split(" ");
-    const interval = setInterval(() => {
-      if (i < words.length) {
-        current += (i === 0 ? "" : " ") + words[i];
-        setDisplayed(current);
-        i++;
-      } else {
-        clearInterval(interval);
-        setDone(true);
-        onDone();
-      }
-    }, 180);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line
-  }, [text]);
-  return (
-    <Typography
-      variant="h6"
-      sx={{ fontWeight: 600, color: "text.primary", minHeight: 48 }}
-    >
-      {displayed}
-    </Typography>
-  );
-};
-
-const SpotifyPaper = styled(Paper)(({ theme }) => ({
-  background: "#f5f5dc",
-  color: "#fff",
-  borderRadius: 20,
-  boxShadow: theme.shadows[4],
-}));
-
-const BouncyEmoji = styled("span")<any>(({ bounce }: { bounce: boolean }) => ({
-  display: "inline-block",
-  fontSize: 36,
-  marginLeft: 8,
-  animation: bounce
-    ? "bounce-emoji 0.7s cubic-bezier(.36,.07,.19,.97) both"
-    : "none",
-  "@keyframes bounce-emoji": {
-    "0%": { transform: "translateY(0)" },
-    "30%": { transform: "translateY(-20px)" },
-    "50%": { transform: "translateY(0)" },
-    "70%": { transform: "translateY(-10px)" },
-    "100%": { transform: "translateY(0)" },
-  },
-}));
-
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<SpotifyUser | null>(null);
   const [topTracks, setTopTracks] = useState<SpotifyTrack[]>([]);
@@ -102,11 +42,8 @@ const Dashboard: React.FC = () => {
   const [topGenres, setTopGenres] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [emojiBounce, setEmojiBounce] = useState(false);
   const confettiFired = useRef(false);
   const navigate = useNavigate();
-  const theme = useTheme();
 
   useEffect(() => {
     const loadData = async () => {
@@ -119,12 +56,12 @@ const Dashboard: React.FC = () => {
         spotifyApi.setAccessToken(token);
         const userData = await spotifyApi.getCurrentUser();
         setUser(userData);
-        // Fetch top tracks and artists
+
         const tracksData = await spotifyApi.getTopTracks(5, "short_term");
         setTopTracks(tracksData);
         const artistsData = await spotifyApi.getTopArtists(5, "short_term");
         setTopArtists(artistsData);
-        // Aggregate albums from top tracks
+
         const albumMap: { [id: string]: SpotifyAlbum } = {};
         tracksData.forEach((track) => {
           if (!albumMap[track.album.id]) {
@@ -138,7 +75,7 @@ const Dashboard: React.FC = () => {
           }
         });
         setTopAlbums(Object.values(albumMap).slice(0, 5));
-        // Aggregate genres from top artists
+
         const genreCount: { [genre: string]: number } = {};
         artistsData.forEach((artist) => {
           artist.genres.forEach((genre: string) => {
@@ -164,21 +101,6 @@ const Dashboard: React.FC = () => {
   const handleLogout = () => {
     spotifyApi.logout();
     navigate("/");
-  };
-
-  const handleSummaryDone = () => {
-    if (!confettiFired.current) {
-      setShowConfetti(true);
-      setEmojiBounce(true);
-      confettiFired.current = true;
-      confetti({
-        particleCount: 120,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ["#1db954", "#191414", "#fff", "#f1c40f", "#e84393"],
-      });
-      setTimeout(() => setEmojiBounce(false), 900);
-    }
   };
 
   if (loading) {
@@ -320,7 +242,7 @@ const Dashboard: React.FC = () => {
         >
           TOP 5 SONGS
         </h2>
-        {/* Top 5 songs row */}
+        {/* Top 5 songs */}
         <Row className="justify-content-center g-4 mb-5">
           {topTracks.map((track, idx) => (
             <Col
@@ -453,7 +375,7 @@ const Dashboard: React.FC = () => {
             }
           }
         `}</style>
-        {/* 3 columns for artists, albums, genres */}
+        {/* artists, albums, genres */}
         <Row className="justify-content-center g-4">
           <Col xs={12} md={4} className="d-flex align-items-stretch">
             <Card
