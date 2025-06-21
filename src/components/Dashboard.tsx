@@ -205,9 +205,9 @@ const Dashboard: React.FC = () => {
               <Typography
                 sx={{
                   color: "#fff",
-                  fontWeight: 600,
                   fontFamily: "Arial, sans-serif",
                   fontSize: 14,
+                  fontWeight: 600,
                   letterSpacing: 1,
                 }}
               >
@@ -221,13 +221,14 @@ const Dashboard: React.FC = () => {
             sx={{
               ml: 3,
               borderRadius: 8,
-              fontWeight: 700,
               background: "#1db954",
               color: "#fff",
               "&:hover": { background: "#1ed760" },
               fontFamily: "Arial, sans-serif",
-              fontSize: 10,
+              fontSize: 12,
+              fontWeight: 700,
               letterSpacing: 1,
+              paddingX: 3,
             }}
           >
             Logout
