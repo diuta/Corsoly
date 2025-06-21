@@ -4,7 +4,6 @@ import { spotifyApi } from "../services/spotifyApi";
 import {
   SpotifyUser,
   SpotifyTrack,
-  GenZJudgment,
   SpotifyArtist,
   SpotifyAlbum,
 } from "../types/spotify";
@@ -25,11 +24,7 @@ import {
   Divider,
   useTheme,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-// @ts-ignore
-import confetti from "canvas-confetti";
 import { Row, Col, Card, CardBody, CardImg } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import bg from "./Static/bg.png";
@@ -42,7 +37,6 @@ const Dashboard: React.FC = () => {
   const [topGenres, setTopGenres] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const confettiFired = useRef(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -208,7 +202,15 @@ const Dashboard: React.FC = () => {
               {user.images?.[0] && (
                 <Avatar src={user.images[0].url} alt={user.display_name} />
               )}
-              <Typography color="#fff" fontWeight={600}>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontWeight: 600,
+                  fontFamily: "Poppins, sans-serif",
+                  fontSize: 14,
+                  letterSpacing: 1,
+                }}
+              >
                 {user.display_name}
               </Typography>
             </Box>
@@ -223,6 +225,9 @@ const Dashboard: React.FC = () => {
               background: "#1db954",
               color: "#fff",
               "&:hover": { background: "#1ed760" },
+              fontFamily: "Poppins, sans-serif",
+              fontSize: 14,
+              letterSpacing: 1,
             }}
           >
             Logout

@@ -45,14 +45,6 @@ export interface SpotifyRecentlyPlayedResponse {
   };
 }
 
-export interface GenZJudgment {
-  track: SpotifyTrack;
-  judgment: string;
-  score: number;
-  emoji: string;
-  vibe: string;
-}
-
 export interface SpotifyAuthResponse {
   access_token: string;
   token_type: string;
